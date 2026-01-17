@@ -1,5 +1,7 @@
 # Resonance Designs – Slint UI Component Kit
 
+![0.1.0](https://img.shields.io)
+
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
 Built with a focus on:
