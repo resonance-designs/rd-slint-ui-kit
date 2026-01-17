@@ -1,0 +1,52 @@
+export component RDSSelectButton {
+    in property <string> label;
+    in property <bool> active;
+    callback clicked();
+
+    width: 80px;
+    height: 28px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: root.active ? #8023d6 : #1c1c22;
+        border-radius: 6px;
+        border-color: root.active ? #b07cff : #2a2a35;
+        border-width: 1px;
+
+        Text {
+            text: root.label;
+            color: #f6f1ff;
+            font-size: 12px;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+
+        TouchArea {
+            clicked => root.clicked();
+        }
+    }
+
+}
+
+export component RDSSequencerCell {
+    in property <bool> active;
+    in property <bool> current;
+    callback clicked();
+
+    width: 20px;
+    height: 20px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: root.current ? #ffffff : (root.active ? #c53bff : #2a2a35);
+        border-radius: 2px;
+        border-color: #3a3a45;
+        border-width: 1px;
+
+        TouchArea {
+            clicked => root.clicked();
+        }
+    }
+}

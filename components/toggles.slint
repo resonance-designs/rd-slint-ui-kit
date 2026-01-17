@@ -1,0 +1,20 @@
+export component RDSCircleToggle {
+    in property <bool> active;
+    callback clicked();
+
+    width: 14px;
+    height: 14px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: root.active ? #c53bff : #2a2a35;
+        border-radius: 999px;
+        border-color: root.active ? #e3c1ff : #3a3a45;
+        border-width: 1px;
+
+        TouchArea {
+            clicked => root.clicked();
+        }
+    }
+}

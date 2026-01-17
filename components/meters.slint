@@ -1,0 +1,48 @@
+export component RDSVUMeter {
+    in property <float> level;
+    in property <color> fill-color: #00ff00;
+
+    width: 140px;
+    height: 10px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: #1a1a22;
+        border-radius: 4px;
+        border-color: #2a2a35;
+        border-width: 1px;
+
+        Rectangle {
+            width: Math.max(4px, root.level * parent.width);
+            height: parent.height;
+            background: root.fill-color;
+            border-radius: 4px;
+        }
+    }
+}
+
+export component RDSVertVUMeter {
+    in property <float> level;
+    in property <color> fill-color: #00ff00;
+
+    width: 12px;
+    height: 88px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: #1a1a22;
+        border-radius: 4px;
+        border-color: #2a2a35;
+        border-width: 1px;
+
+        Rectangle {
+            width: parent.width;
+            height: Math.max(2px, root.level * parent.height);
+            y: parent.height - self.height;
+            background: root.fill-color;
+            border-radius: 4px;
+        }
+    }
+}
