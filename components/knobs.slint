@@ -1,3 +1,5 @@
+import { Theme } from "../theme/index.slint";
+
 /*
 Component: RDSKnob
 Description: A rotary knob component that supports both bounded and infinite rotation modes.
@@ -45,10 +47,10 @@ export component RDSKnob inherits Rectangle {
 
     width: root.size;
     height: root.size;
-    background: @linear-gradient(180deg, #4B4B4B 0%, #202020 100%);
+    background: @linear-gradient(180deg, Theme.active.background_raised 0%, Theme.active.background_main 100%);
     border-radius: root.width / 2;
     border-width: 2px;
-    border-color: @linear-gradient(180deg, #606060 0%, #0E0E0E 100%);
+    border-color: @linear-gradient(180deg, Theme.active.border_strong 0%, Theme.active.background_main 100%);
 
     // Position/value indicator - size scales with knob size
     indicator := Rectangle {
@@ -57,10 +59,10 @@ export component RDSKnob inherits Rectangle {
         // Calculate position based on rotation angle and indicator-position
         x: root.width / 2 - self.width / 2 + Math.cos(root.rotation-angle - 90deg) * root.indicator-position;
         y: root.height / 2 - self.height / 2 + Math.sin(root.rotation-angle - 90deg) * root.indicator-position;
-        background: @linear-gradient(180deg, #202020 0%, #4B4B4B 100%);
+        background: @linear-gradient(180deg, Theme.active.background_main 0%, Theme.active.background_raised 100%);
         border-radius: self.width / 2;
         border-width: 1px;
-        border-color: @linear-gradient(180deg, #0E0E0E 0%, #606060 100%);
+        border-color: @linear-gradient(180deg, Theme.active.background_main 0%, Theme.active.border_strong 100%);
     }
 
     // Touch area for interaction

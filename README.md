@@ -1,18 +1,19 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.3-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.4-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
 Built with a focus on:
 
-- Clean, modern dark UI aesthetics
+- Clean, modern aesthetics
 - Audio-centric controls (VU meters, knobs, sequencer cells)
+- Dynamic theming support
 - Simple integration into existing Slint projects
 
 ## Components Included
 
-`RDSSelectButton`
+### `RDSSelectButton`
 
 A small selectable button with active state.
 
@@ -27,7 +28,7 @@ A small selectable button with active state.
 
 ---
 
-`RDSSequencerCell`
+### `RDSSequencerCell`
 
 A compact grid cell suitable for step sequencers.
 
@@ -42,29 +43,18 @@ A compact grid cell suitable for step sequencers.
 
 ---
 
-`RDSVUMeter`
+### `RDSVUMeter` / `RDSVertVUMeter`
 
-A horizontal VU meter.
-
-**[Properties]**
-
-- `level: float` (0.0 – 1.0 recommended)
-- `fill-color: color`
-
----
-
-`RDSVertVUMeter`
-
-A vertical VU meter.
+Horizontal and vertical VU meters.
 
 **[Properties]**
 
 - `level: float` (0.0 – 1.0 recommended)
-- `fill-color: color`
+- `fill-color: color` (Defaults to `Theme.active.meter_normal`)
 
 ---
 
-`RDSCircleToggle`
+### `RDSCircleToggle`
 
 A minimal circular toggle indicator.
 
@@ -78,7 +68,7 @@ A minimal circular toggle indicator.
 
 ---
 
-`RDSKnob`
+### `RDSKnob`
 
 A rotary knob supporting bounded and infinite rotation modes.
 
@@ -97,30 +87,81 @@ A rotary knob supporting bounded and infinite rotation modes.
 
 - `value-changed(float)`
 
-**[Modes]**
+---
 
-- **Bounded mode:** `min-value != max-value`
-- **Infinite mode:** `min-value == max-value`
+## Theming
+
+The library features a centralized theming system using a global `Theme` and `RDSTheme` struct.
+
+### Using Theme Properties
+
+Components automatically use the `Theme.active` values. You can access these in your own components:
+
+```slint
+import { Theme } from "rds-slint-ui-kit/theme/index.slint";
+
+Rectangle {
+    background: Theme.active.background_main;
+    border-radius: Theme.active.radius_medium;
+}
+```
+
+### Switching Themes at Runtime
+
+Use the `ThemeManager` global to switch between available themes:
+
+```slint
+import { ThemeManager } from "rds-slint-ui-kit/theme/index.slint";
+
+// In your UI
+Button {
+    text: "Switch to Light Mode";
+    clicked => { ThemeManager.switch_to_light(); }
+}
+```
+
+### Creating Custom Themes
+
+1. Define a new file (e.g., `my_theme.slint`).
+2. Implement a global that provides `RDSTheme` values:
+
+    ```slint
+    import { RDSTheme } from "theme.slint";
+
+    export global MyCustomTheme {
+        out property <RDSTheme> values: {
+            background_main: #f0f0f0,
+            text_primary: #111111,
+            accent_primary: #ff5500,
+            // ... include all RDSTheme fields
+        };
+    }
+    ```
+
+3. Apply it by setting `Theme.active = MyCustomTheme.values;`.
 
 ## Example Usage
 
-``` slint
-import { RDSKnob, RDSVUMeter } from "rds-ui/components.slint";
+```slint
+import { RDSKnob, RDSVUMeter, ThemeManager } from "rds-slint-ui-kit/components/index.slint";
 
-RDSKnob {
-    size: 60px;
-    min-value: 0;
-    max-value: 127;
-    sensitivity: 0.8;
+VerticalLayout {
+    spacing: 20px;
 
-    value-changed(v) => {
-        console.log("Knob value:", v);
+    RDSKnob {
+        size: 60px;
+        min-value: 0;
+        max-value: 127;
     }
-}
 
-RDSVUMeter {
-    level: 0.65;
-    fill-color: #c53bff;
+    RDSVUMeter {
+        level: 0.65;
+    }
+
+    Button {
+        text: "Toggle Theme";
+        clicked => { ThemeManager.switch_to_light(); }
+    }
 }
 ```
 
@@ -131,13 +172,11 @@ This library is intended to be distributed via:
 - npm (for Slint + JS / WASM projects)
 - Cargo (for Rust + Slint projects)
 
-See roadmap below.
-
 ## Roadmap
 
 - [ ] npm package with .slint exports
 - [ ] Rust crate wrapping Slint resources
-- [ ] Theming support
+- [x] Theming support
 - [ ] Additional audio UI components
 - [ ] Documentation site & screenshots
 

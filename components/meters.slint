@@ -1,6 +1,8 @@
+import { Theme } from "../theme/index.slint";
+
 export component RDSVUMeter {
     in property <float> level;
-    in property <color> fill-color: #00ff00;
+    in property <color> fill-color: Theme.active.meter_normal;
     property <float> clamped-level: Math.max(0.0, Math.min(1.0, root.level));
 
     width: 140px;
@@ -9,23 +11,23 @@ export component RDSVUMeter {
     Rectangle {
         width: parent.width;
         height: parent.height;
-        background: #1a1a22;
-        border-radius: 4px;
-        border-color: #2a2a35;
+        background: Theme.active.background_main;
+        border-radius: Theme.active.radius_medium;
+        border-color: Theme.active.border_subtle;
         border-width: 1px;
 
         Rectangle {
             width: Math.max(4px, root.clamped-level * parent.width);
             height: parent.height;
             background: root.fill-color;
-            border-radius: 4px;
+            border-radius: Theme.active.radius_medium;
         }
     }
 }
 
 export component RDSVertVUMeter {
     in property <float> level;
-    in property <color> fill-color: #00ff00;
+    in property <color> fill-color: Theme.active.meter_normal;
     property <float> clamped-level: Math.max(0.0, Math.min(1.0, root.level));
 
     width: 12px;
@@ -34,9 +36,9 @@ export component RDSVertVUMeter {
     Rectangle {
         width: parent.width;
         height: parent.height;
-        background: #1a1a22;
-        border-radius: 4px;
-        border-color: #2a2a35;
+        background: Theme.active.background_main;
+        border-radius: Theme.active.radius_medium;
+        border-color: Theme.active.border_subtle;
         border-width: 1px;
 
         Rectangle {
@@ -44,7 +46,7 @@ export component RDSVertVUMeter {
             height: Math.max(2px, root.clamped-level * parent.height);
             y: parent.height - self.height;
             background: root.fill-color;
-            border-radius: 4px;
+            border-radius: Theme.active.radius_medium;
         }
     }
 }

@@ -1,3 +1,5 @@
+import { Theme } from "../theme/index.slint";
+
 export component RDSCircleToggle {
     in property <bool> active;
     callback clicked();
@@ -8,9 +10,9 @@ export component RDSCircleToggle {
     Rectangle {
         width: parent.width;
         height: parent.height;
-        background: root.active ? #c53bff : #2a2a35;
+        background: root.active ? Theme.active.accent_primary : Theme.active.border_subtle;
         border-radius: 999px;
-        border-color: root.active ? #e3c1ff : #3a3a45;
+        border-color: root.active ? Theme.active.accent_highlight : Theme.active.border_strong;
         border-width: 1px;
 
         TouchArea {
