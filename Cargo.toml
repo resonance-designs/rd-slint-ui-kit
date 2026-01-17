@@ -1,0 +1,11 @@
+[package]
+name = "rds-slint-ui-kit"
+version = "0.1.1"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+slint = "1.4"
+
+[build-dependencies]
+slint-build = "1.4"
