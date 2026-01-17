@@ -1,0 +1,23 @@
+[package]
+name = "rds-slint-ui-kit"
+version = "0.1.2"
+readme = "README.md"
+repository = "https://github.com/resonance-designs/rds-ui"
+categories = ["gui"]
+keywords = ["slint", "ui", "audio"]
+edition = "2021"
+license = "MIT"
+
+include = [
+    "components/**/*.slint",
+    "build.rs",
+    "Cargo.toml",
+    "README.md",
+    "LICENSE"
+]
+
+[dependencies]
+slint = "1.4"
+
+[build-dependencies]
+slint-build = "1.4"
