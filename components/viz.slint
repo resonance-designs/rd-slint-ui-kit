@@ -1,0 +1,215 @@
+import { Theme } from "../theme/index.slint";
+
+/*
+Component: RDSWaveformViz
+Description: Visualizes a static waveform with an optional playhead.
+Public members:
+- waveform: [float] - Array of amplitude values (0.0 to 1.0)
+- waveform_time_labels: [string] - Time markers to display along the X-axis
+- playhead-index: int - Current position of the playhead in the waveform array
+*/
+
+export component RDSWaveformViz inherits Rectangle {
+    in property <[float]> waveform;
+    in property <[string]> waveform_time_labels;
+    in property <int> playhead-index: 0;
+
+    background: Theme.active.background_main;
+    border-radius: Theme.active.radius_large;
+    border-color: Theme.active.border_subtle;
+    border-width: 1px;
+
+    HorizontalLayout {
+        padding: 8px;
+        spacing: 8px;
+
+        VerticalLayout {
+            width: 44px;
+            height: parent.height - 16px;
+            spacing: 0px;
+            Text { text: "+6 dB"; color: Theme.active.text_secondary; font-size: 10px; }
+            Rectangle { height: (parent.height - 36px) / 2; width: 1px; background: transparent; }
+            Text { text: "0 dB"; color: Theme.active.text_secondary; font-size: 11px; }
+            Rectangle { height: (parent.height - 36px) / 2; width: 1px; background: transparent; }
+            Text { text: "-60 dB"; color: Theme.active.text_secondary; font-size: 10px; }
+        }
+
+        VerticalLayout {
+            spacing: 6px;
+            width: parent.width - 60px;
+            Rectangle {
+                width: parent.width;
+                height: parent.height - 20px;
+                background: transparent;
+                clip: true;
+
+                Rectangle {
+                    width: parent.width;
+                    height: parent.height;
+                    for amp[index] in root.waveform : Rectangle {
+                        width: parent.width / root.waveform.length;
+                        height: parent.height;
+                        x: index * (parent.width / root.waveform.length);
+                        background: transparent;
+                        Rectangle {
+                            width: parent.width;
+                            height: Math.max(2px, Math.abs(amp) * (parent.height - 4px));
+                            y: (parent.height - self.height) / 2;
+                            background: index < root.playhead-index ? Theme.active.accent_primary : Theme.active.accent_secondary;
+                            border-radius: Theme.active.radius_small;
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                width: parent.width;
+                height: 14px;
+                background: transparent;
+                for label[i] in root.waveform_time_labels : Text {
+                    text: label;
+                    color: Theme.active.text_secondary;
+                    font-size: 10px;
+                    x: i * (parent.width / root.waveform_time_labels.length);
+                    y: 0px;
+                }
+            }
+        }
+    }
+}
+
+/*
+Component: RDSVUMeter
+Description: Horizontal VU meter for visualizing signal levels.
+Public members:
+- level: float - Current signal level (0.0 to 1.0)
+- fill-color: color - Color of the active level indicator
+*/
+export component RDSVUMeter {
+    in property <float> level;
+    in property <color> fill-color: Theme.active.meter_normal;
+    property <float> clamped-level: Math.max(0.0, Math.min(1.0, root.level));
+
+    width: 140px;
+    height: 10px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: Theme.active.background_main;
+        border-radius: Theme.active.radius_medium;
+        border-color: Theme.active.border_subtle;
+        border-width: 1px;
+
+        Rectangle {
+            width: Math.max(4px, root.clamped-level * parent.width);
+            height: parent.height;
+            background: root.fill-color;
+            border-radius: Theme.active.radius_medium;
+        }
+    }
+}
+
+/*
+Component: RDSVertVUMeter
+Description: Vertical VU meter for visualizing signal levels.
+Public members:
+- level: float - Current signal level (0.0 to 1.0)
+- fill-color: color - Color of the active level indicator
+*/
+export component RDSVertVUMeter {
+    in property <float> level;
+    in property <color> fill-color: Theme.active.meter_normal;
+    property <float> clamped-level: Math.max(0.0, Math.min(1.0, root.level));
+
+    width: 12px;
+    height: 88px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: Theme.active.background_main;
+        border-radius: Theme.active.radius_medium;
+        border-color: Theme.active.border_subtle;
+        border-width: 1px;
+
+        Rectangle {
+            width: parent.width;
+            height: Math.max(2px, root.clamped-level * parent.height);
+            y: parent.height - self.height;
+            background: root.fill-color;
+            border-radius: Theme.active.radius_medium;
+        }
+    }
+}
+
+/*
+Component: RDSOscilloscopeViz
+Description: Visualizes a real-time signal as an oscilloscope trace.
+Public members:
+- oscilloscope: [float] - Array of signal samples
+*/
+export component RDSOscilloscopeViz inherits Rectangle {
+    in property <[float]> oscilloscope;
+    background: transparent;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        for sample[i] in root.oscilloscope : Rectangle {
+            width: 2px;
+            height: Math.max(2px, Math.abs(sample) * (parent.height - 4px));
+            x: i * (parent.width / root.oscilloscope.length);
+            y: (parent.height - self.height) / 2;
+            background: Theme.active.accent_highlight;
+        }
+    }
+}
+
+/*
+Component: RDSSpectrumViz
+Description: Visualizes frequency spectrum data as vertical bars.
+Public members:
+- spectrum: [float] - Array of magnitude values per frequency bin
+*/
+export component RDSSpectrumViz inherits Rectangle {
+    in property <[float]> spectrum;
+    background: transparent;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        for mag[i] in root.spectrum : Rectangle {
+            width: parent.width / root.spectrum.length;
+            height: Math.max(2px, mag * (parent.height - 4px));
+            x: i * (parent.width / root.spectrum.length);
+            y: parent.height - self.height;
+            background: Theme.active.accent_primary;
+        }
+    }
+}
+
+/*
+Component: RDSVectorscopeViz
+Description: Visualizes phase relationship between two signals.
+Public members:
+- vectorscope_x: [float] - Left channel signal samples
+- vectorscope_y: [float] - Right channel signal samples
+*/
+export component RDSVectorscopeViz inherits Rectangle {
+    in property <[float]> vectorscope_x;
+    in property <[float]> vectorscope_y;
+    background: transparent;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        for xval[i] in root.vectorscope_x : Rectangle {
+            width: 2px;
+            height: 2px;
+            x: ((xval * 0.5) + 0.5) * parent.width;
+            y: ((root.vectorscope_y[i] * -0.5) + 0.5) * parent.height;
+            background: Theme.active.meter_normal;
+        }
+    }
+}

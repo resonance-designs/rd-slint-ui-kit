@@ -1,5 +1,14 @@
 import { Theme } from "../theme/index.slint";
 
+/*
+Component: RDSSelectButton
+Description: A small selectable button with active state.
+Public members:
+- label: string - Text displayed on the button
+- active: bool - Current selection state
+- clicked(): callback - Triggered when the button is clicked
+*/
+
 export component RDSSelectButton {
     in property <string> label;
     in property <bool> active;
@@ -9,12 +18,26 @@ export component RDSSelectButton {
     height: 28px;
 
     Rectangle {
-        width: parent.width;
-        height: parent.height;
-        background: root.active ? Theme.active.accent_secondary : Theme.active.background_main;
+        width: 80px;
+        height: 28px;
+        x: (parent.width - self.width) / 2;
+        y: (parent.height - self.height) / 2;
         border-radius: Theme.active.radius_large;
-        border-color: root.active ? Theme.active.accent_highlight : Theme.active.border_subtle;
+        border-color: @linear-gradient(180deg, #242424 0%, #161616 100%);
         border-width: 1px;
+        drop-shadow-blur: root.active ? 8px : 8px;
+        drop-shadow-offset-y: root.active ? 2px : 6px;
+        drop-shadow-color: #000;
+
+        // Inner background rectangle to prevent bleed, inset by border width
+        Rectangle {
+            x: 1px;
+            y: 1px;
+            width: parent.width - 4px;
+            height: parent.height - 4px;
+            background: root.active ? Theme.active.accent_secondary : Theme.active.background_main;
+            border-radius: Theme.active.radius_large - 3px;
+        }
 
         Text {
             text: root.label;
@@ -30,9 +53,16 @@ export component RDSSelectButton {
             clicked => root.clicked();
         }
     }
-
 }
 
+/*
+Component: RDSSequencerCell
+Description: A compact grid cell suitable for step sequencers.
+Public members:
+- active: bool - Whether the step is active/enabled
+- current: bool - Whether this is the currently playing step
+- clicked(): callback - Triggered when the cell is clicked
+*/
 export component RDSSequencerCell {
     in property <bool> active;
     in property <bool> current;

@@ -7,6 +7,7 @@ pub use crate::RDSKnob;
 pub use crate::RDSVUMeter;
 pub use crate::RDSVertVUMeter;
 pub use crate::RDSCircleToggle;
+pub use crate::RDSSlider;
 
 // Exporting theme-related globals/structs
 pub use crate::Theme;
