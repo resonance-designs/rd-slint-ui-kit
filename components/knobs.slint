@@ -85,7 +85,7 @@ export component RDSKnob inherits Rectangle {
     }
 
     Rectangle {
-        visible: root.indicator == "line" && root.renderer == "lo-fi";
+        visible: root.indicator == "line" && (root.renderer == "lo-fi" || root.renderer == "hi-fi");
         width: 2px;
         height: root.size / 4;
         x: root.width / 2 - self.width / 2 + Math.cos(root.rotation-angle - 90deg) * root.indicator-position;
@@ -95,7 +95,7 @@ export component RDSKnob inherits Rectangle {
     }
 
     Path {
-        visible: root.indicator == "caret" && root.renderer == "lo-fi";
+        visible: root.indicator == "caret" && (root.renderer == "lo-fi" || root.renderer == "hi-fi");
         width: root.size / 5;
         height: root.size / 5;
         x: root.width / 2 - self.width / 2 + Math.cos(root.rotation-angle - 90deg) * root.indicator-position;

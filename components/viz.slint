@@ -13,6 +13,8 @@ export component RDSWaveformViz inherits Rectangle {
     in property <[float]> waveform;
     in property <[string]> waveform_time_labels;
     in property <int> playhead-index: 0;
+    private property <int> waveform_length: Math.max(1, root.waveform.length);
+    private property <int> waveform_label_length: Math.max(1, root.waveform_time_labels.length);
 
     background: Theme.active.background_main;
     border-radius: Theme.active.radius_large;
@@ -47,9 +49,9 @@ export component RDSWaveformViz inherits Rectangle {
                     width: parent.width;
                     height: parent.height;
                     for amp[index] in root.waveform : Rectangle {
-                        width: parent.width / root.waveform.length;
+                        width: parent.width / root.waveform_length;
                         height: parent.height;
-                        x: index * (parent.width / root.waveform.length);
+                        x: index * (parent.width / root.waveform_length);
                         background: transparent;
                         Rectangle {
                             width: parent.width;
@@ -70,7 +72,7 @@ export component RDSWaveformViz inherits Rectangle {
                     text: label;
                     color: Theme.active.text_secondary;
                     font-size: 10px;
-                    x: i * (parent.width / root.waveform_time_labels.length);
+                    x: i * (parent.width / root.waveform_label_length);
                     y: 0px;
                 }
             }
@@ -201,13 +203,16 @@ export component RDSVectorscopeViz inherits Rectangle {
     in property <[float]> vectorscope_y;
     background: transparent;
 
+    // vectorscope_x/vectorscope_y are paired arrays and should stay in sync.
+    private property <int> vectorscope_len: Math.min(root.vectorscope_x.length, root.vectorscope_y.length);
+
     Rectangle {
         width: parent.width;
         height: parent.height;
-        for xval[i] in root.vectorscope_x : Rectangle {
+        for idx[i] in vectorscope_len : Rectangle {
             width: 2px;
             height: 2px;
-            x: ((xval * 0.5) + 0.5) * parent.width;
+            x: ((root.vectorscope_x[i] * 0.5) + 0.5) * parent.width;
             y: ((root.vectorscope_y[i] * -0.5) + 0.5) * parent.height;
             background: Theme.active.meter_normal;
         }
