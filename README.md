@@ -1,6 +1,6 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.8-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.9-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
@@ -194,6 +194,56 @@ RDSSlider {
     max-value: 127;
     orientation: "vertical";
     size: "medium";
+}
+```
+
+---
+
+### `RDSHeaderLabel`
+
+A styled header label with background and padding.
+
+**[Properties]**
+
+- `text: string`
+- `horizontal-alignment: enum` (Default: `center`)
+- `vertical-alignment: enum` (Default: `center`)
+- `padding-horizontal: length` (Default: `8px`)
+- `padding-vertical: length` (Default: `4px`)
+
+**[Example]**
+
+```slint
+RDSHeaderLabel {
+    text: "OSCILLATOR 1";
+}
+```
+
+---
+
+### `RDSComboBox`
+
+A custom dropdown selector with a styled trigger and popup list.
+
+**[Properties]**
+
+- `model: [string]` - List of items to display
+- `current-index: int` - Selected index
+- `enabled: bool` (Default: `true`)
+- `item-height: length` (Default: `28px`)
+- `max-visible-items: int` (Default: `6`)
+
+**[Callbacks]**
+
+- `selected(int)` - Triggered when an item is selected
+
+**[Example]**
+
+```slint
+RDSComboBox {
+    model: ["Sine", "Saw", "Square", "Noise"];
+    current-index: 0;
+    selected(idx) => { debug("Selected: ", idx); }
 }
 ```
 

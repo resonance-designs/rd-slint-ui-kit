@@ -1,14 +1,5 @@
 import { Theme } from "../theme/index.slint";
 
-/*
-Component: RDSSelectButton
-Description: A small selectable button with active state.
-Public members:
-- label: string - Text displayed on the button
-- active: bool - Current selection state
-- clicked(): callback - Triggered when the button is clicked
-*/
-
 export component RDSSelectButton {
     in property <string> label;
     in property <bool> active;
@@ -55,14 +46,6 @@ export component RDSSelectButton {
     }
 }
 
-/*
-Component: RDSSequencerCell
-Description: A compact grid cell suitable for step sequencers.
-Public members:
-- active: bool - Whether the step is active/enabled
-- current: bool - Whether this is the currently playing step
-- clicked(): callback - Triggered when the cell is clicked
-*/
 export component RDSSequencerCell {
     in property <bool> active;
     in property <bool> current;
