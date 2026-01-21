@@ -1,14 +1,5 @@
 import { Theme } from "../theme/index.slint";
 
-/*
-Component: RDSWaveformViz
-Description: Visualizes a static waveform with an optional playhead.
-Public members:
-- waveform: [float] - Array of amplitude values (0.0 to 1.0)
-- waveform_time_labels: [string] - Time markers to display along the X-axis
-- playhead-index: int - Current position of the playhead in the waveform array
-*/
-
 export component RDSWaveformViz inherits Rectangle {
     in property <[float]> waveform;
     in property <[string]> waveform_time_labels;
@@ -80,13 +71,6 @@ export component RDSWaveformViz inherits Rectangle {
     }
 }
 
-/*
-Component: RDSVUMeter
-Description: Horizontal VU meter for visualizing signal levels.
-Public members:
-- level: float - Current signal level (0.0 to 1.0)
-- fill-color: color - Color of the active level indicator
-*/
 export component RDSVUMeter {
     in property <float> level;
     in property <color> fill-color: Theme.active.meter_normal;
@@ -112,13 +96,6 @@ export component RDSVUMeter {
     }
 }
 
-/*
-Component: RDSVertVUMeter
-Description: Vertical VU meter for visualizing signal levels.
-Public members:
-- level: float - Current signal level (0.0 to 1.0)
-- fill-color: color - Color of the active level indicator
-*/
 export component RDSVertVUMeter {
     in property <float> level;
     in property <color> fill-color: Theme.active.meter_normal;
@@ -145,12 +122,6 @@ export component RDSVertVUMeter {
     }
 }
 
-/*
-Component: RDSOscilloscopeViz
-Description: Visualizes a real-time signal as an oscilloscope trace.
-Public members:
-- oscilloscope: [float] - Array of signal samples
-*/
 export component RDSOscilloscopeViz inherits Rectangle {
     in property <[float]> oscilloscope;
     background: transparent;
@@ -168,12 +139,6 @@ export component RDSOscilloscopeViz inherits Rectangle {
     }
 }
 
-/*
-Component: RDSSpectrumViz
-Description: Visualizes frequency spectrum data as vertical bars.
-Public members:
-- spectrum: [float] - Array of magnitude values per frequency bin
-*/
 export component RDSSpectrumViz inherits Rectangle {
     in property <[float]> spectrum;
     background: transparent;
@@ -191,13 +156,6 @@ export component RDSSpectrumViz inherits Rectangle {
     }
 }
 
-/*
-Component: RDSVectorscopeViz
-Description: Visualizes phase relationship between two signals.
-Public members:
-- vectorscope_x: [float] - Left channel signal samples
-- vectorscope_y: [float] - Right channel signal samples
-*/
 export component RDSVectorscopeViz inherits Rectangle {
     in property <[float]> vectorscope_x;
     in property <[float]> vectorscope_y;
