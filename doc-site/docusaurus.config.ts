@@ -5,8 +5,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'rds-slint-ui-kit',
-  tagline: 'UI components for audio tools and creative applications',
+  title: 'Resonance Designs Slint UI Component Kit',
+  tagline: 'A Slint library of UI components for audio tools and creative applications',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -76,10 +76,10 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
     navbar: {
-      title: 'rds-slint-ui-kit',
+      title: 'RD Slint UI Kit',
       logo: {
         alt: 'rds-slint-ui-kit Logo',
-        src: 'img/logo.svg',
+        src: 'img/RD_Logo.svg',
       },
       items: [
         {

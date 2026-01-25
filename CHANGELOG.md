@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.1.11] - 2026-01-25
+
+- Added a means to add arbitrary content within the `RDSHeaderLabel` container.
+- Updated versioning script (`update-version.js`) to also target the `package.json` of the doc-site.
+- Updated documentation.
+
 ## [0.1.10] - 2026-01-25
 
 - Added new components:

@@ -1,6 +1,6 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.10-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.11-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
@@ -249,7 +249,7 @@ RDSSlider {
 
 ### `RDSHeaderLabel`
 
-A styled header label with background and padding.
+A styled header label with background, padding, and a right-side slot for child components.
 
 **[Properties]**
 
@@ -258,12 +258,17 @@ A styled header label with background and padding.
 - `vertical-alignment: enum` (Default: `center`)
 - `padding-horizontal: length` (Default: `8px`)
 - `padding-vertical: length` (Default: `4px`)
+- `right-padding: length` (Default: `8px`)
+- `right-gap: length` (Default: `6px`)
 
 **[Example]**
 
 ```slint
 RDSHeaderLabel {
     text: "OSCILLATOR 1";
+    RDSCircleToggle {
+        active: true;
+    }
 }
 ```
 
