@@ -1,0 +1,622 @@
+import { Theme } from "../theme/index.slint";
+import { StepperReadout } from "selectors.slint";
+
+/**
+ * Input-focused UI components (pads, keypads, etc.).
+ */
+
+component KeypadButton inherits Rectangle {
+    in property <string> label;
+    callback clicked();
+
+    width: 44px;
+    height: 36px;
+    border-radius: Theme.active.radius_small;
+    border-color: Theme.active.border_strong;
+    border-width: 1px;
+    background: touch.pressed ? Theme.active.accent_secondary : Theme.active.background_main;
+
+    Text {
+        text: root.label;
+        color: Theme.active.text_primary;
+        font-family: Theme.active.font_body;
+        font-size: Theme.active.font_medium;
+        horizontal-alignment: center;
+        vertical-alignment: center;
+    }
+
+    touch := TouchArea {
+        clicked => { root.clicked(); }
+    }
+}
+
+component KeybedKey inherits Rectangle {
+    in property <int> base-note;
+    in property <int> octave;
+    in property <int> semitone;
+    in property <int> note;
+    in property <string> scale: "chromatic";
+    in property <bool> is-black: false;
+    in property <length> key-width;
+    in property <length> key-height;
+    callback triggered(note: int);
+
+    width: root.key-width;
+    height: root.key-height;
+    border-radius: root.is-black ? 2px : 3px;
+    border-color: Theme.active.border_strong;
+    border-width: 1px;
+    background: root.is-black ? Theme.active.background_raised : Theme.active.background_main;
+
+    private property <bool> allowed:
+        root.scale == "" || root.scale == "chromatic"
+            ? true
+            : root.scale == "major"
+                ? (root.semitone == 0 || root.semitone == 2 || root.semitone == 4 ||
+                   root.semitone == 5 || root.semitone == 7 || root.semitone == 9 ||
+                   root.semitone == 11)
+            : root.scale == "minor"
+                ? (root.semitone == 0 || root.semitone == 2 || root.semitone == 3 ||
+                    root.semitone == 5 || root.semitone == 7 || root.semitone == 8 ||
+                    root.semitone == 10)
+            : root.scale == "pentatonic"
+                ? (root.semitone == 0 || root.semitone == 2 || root.semitone == 4 ||
+                    root.semitone == 7 || root.semitone == 9)
+            : root.scale == "blues"
+                ? (root.semitone == 0 || root.semitone == 3 || root.semitone == 5 ||
+                    root.semitone == 6 || root.semitone == 7 || root.semitone == 10)
+            : true;
+
+    opacity: root.allowed ? 1.0 : 0.45;
+
+    TouchArea {
+        clicked => {
+            if (root.allowed) {
+                root.triggered(root.note);
+            }
+        }
+    }
+}
+
+/*
+Component: RDSNumericKeypad
+Description: A numeric keypad for entering values, with committed and cleared callbacks.
+Public members:
+- current-value: float - The current value to display
+- input-text: string - The raw input text
+- pad-digits: int - Number of digits to pad readout
+- allow-negative: bool - Whether negative values are allowed
+- num-only: bool - If true, only integers are allowed (no decimal/negative)
+- input-int: int - Integer part of input
+- input-decimal: int - Decimal part of input
+- input-has-value: bool - Internal state
+- input-negative: bool - Internal state
+- input-decimal-active: bool - Internal state
+- parsed-value: float - The resulting float value
+- input-changed(string): callback - Triggered on input change
+- committed(float): callback - Triggered when "OK" or "Enter" is pressed
+- cleared(): callback - Triggered when cleared
+- commit(): function - Programmatically commit the current input
+*/
+export component RDSNumericKeypad {
+    in property <float> current-value: 0.0;
+    in-out property <string> input-text: "";
+    in property <int> pad-digits: 3;
+    in property <bool> allow-negative: false;
+    in property <bool> num-only: true;
+    in-out property <int> input-int: 0;
+    in-out property <int> input-decimal: 0;
+    in-out property <bool> input-has-value: false;
+    in-out property <bool> input-negative: false;
+    in-out property <bool> input-decimal-active: false;
+    out property <float> parsed-value: root.parsed-input;
+
+    callback input-changed(value: string);
+    callback committed(value: float);
+    callback cleared();
+    function handle-digit(value: int) {
+        if (root.input-decimal-active) {
+            root.input-decimal = value;
+        } else {
+            root.input-int = root.input-int * 10 + value;
+        }
+        root.input-has-value = true;
+        root.input-text = root.input-display;
+        root.input-changed(root.input-text);
+    }
+
+    function handle-delete() {
+        if (root.input-decimal-active) {
+            root.input-decimal-active = false;
+            root.input-decimal = 0;
+        } else {
+            root.input-int = Math.floor(root.input-int / 10);
+            if (root.input-int <= 0) {
+                root.input-int = 0;
+                root.input-has-value = false;
+                root.input-negative = false;
+            }
+        }
+        root.input-text = root.input-display;
+        root.input-changed(root.input-text);
+    }
+
+    function handle-clear() {
+        root.input-text = "-";
+        root.input-int = 0;
+        root.input-decimal = 0;
+        root.input-has-value = false;
+        root.input-negative = false;
+        root.input-decimal-active = false;
+        root.cleared();
+        root.input-changed(root.input-text);
+    }
+
+    function handle-decimal() {
+        if (!root.num-only) {
+            root.input-decimal-active = true;
+            if (!root.input-has-value) {
+                root.input-has-value = true;
+                root.input-int = 0;
+            }
+            root.input-text = root.input-display;
+            root.input-changed(root.input-text);
+        }
+    }
+
+    function handle-negative() {
+        if (!root.num-only && root.allow-negative) {
+            root.input-negative = !root.input-negative;
+            root.input-text = root.input-display;
+            root.input-changed(root.input-text);
+        }
+    }
+
+    function handle-ok() {
+        root.committed(root.parsed-input);
+    }
+
+    public function commit() {
+        root.committed(root.parsed-input);
+    }
+
+    width: 200px;
+    height: 280px;
+
+    private property <string> input-display:
+        root.input-has-value
+            ? (root.input-negative ? "-" : "") +
+              root.input-int +
+              (root.input-decimal-active ? "." + root.input-decimal : "")
+            : "-";
+    private property <float> parsed-input:
+        root.input-has-value
+            ? (root.input-negative ? -1.0 : 1.0) *
+                (root.input-int + (root.input-decimal-active ? root.input-decimal * 0.1 : 0.0))
+            : root.current-value;
+
+
+    FocusScope {
+        width: parent.width;
+        height: parent.height;
+
+        key-pressed(event) => {
+            if (event.text == "0") {
+                root.handle-digit(0);
+                return accept;
+            }
+            if (event.text == "1") {
+                root.handle-digit(1);
+                return accept;
+            }
+            if (event.text == "2") {
+                root.handle-digit(2);
+                return accept;
+            }
+            if (event.text == "3") {
+                root.handle-digit(3);
+                return accept;
+            }
+            if (event.text == "4") {
+                root.handle-digit(4);
+                return accept;
+            }
+            if (event.text == "5") {
+                root.handle-digit(5);
+                return accept;
+            }
+            if (event.text == "6") {
+                root.handle-digit(6);
+                return accept;
+            }
+            if (event.text == "7") {
+                root.handle-digit(7);
+                return accept;
+            }
+            if (event.text == "8") {
+                root.handle-digit(8);
+                return accept;
+            }
+            if (event.text == "9") {
+                root.handle-digit(9);
+                return accept;
+            }
+            if (!root.num-only && root.allow-negative && event.text == "-") {
+                root.handle-negative();
+                return accept;
+            }
+            if (!root.num-only && event.text == ".") {
+                root.handle-decimal();
+                return accept;
+            }
+            if (event.text == "\u{0008}" || event.text == "\u{007f}") {
+                root.handle-delete();
+                return accept;
+            }
+            if (event.text == "\u{000d}" || event.text == "\n") {
+                root.handle-ok();
+                return accept;
+            }
+            reject
+        }
+
+        readout := VerticalLayout {
+            spacing: 4px;
+            width: parent.width;
+            height: 96px;
+            Text { text: "Current"; color: Theme.active.text_secondary; font-size: 10px; }
+            StepperReadout {
+                value: root.current-value;
+                min-value: -9999.0;
+                max-value: 9999.0;
+                pad-digits: root.pad-digits;
+                editing: false;
+            }
+            Text { text: "New"; color: Theme.active.text_secondary; font-size: 10px; }
+            Rectangle {
+                width: 80px;
+                height: 32px;
+                border-radius: Theme.active.radius_small;
+                border-color: Theme.active.border_strong;
+                border-width: 1px;
+                background: Theme.active.background_main;
+                Text {
+                    text: root.input-display;
+                    color: Theme.active.text_primary;
+                    font-family: Theme.active.font_readout;
+                    font-size: Theme.active.font_medium;
+                    horizontal-alignment: center;
+                    vertical-alignment: center;
+                }
+            }
+        }
+
+        keypad := VerticalLayout {
+            spacing: 6px;
+            width: parent.width;
+            height: parent.height - readout.height - 8px;
+
+            HorizontalLayout {
+                spacing: 6px;
+                KeypadButton {
+                    label: "7"; clicked => {
+                        root.handle-digit(7);
+                    }
+                }
+                KeypadButton {
+                    label: "8"; clicked => {
+                        root.handle-digit(8);
+                    }
+                }
+                KeypadButton {
+                    label: "9"; clicked => {
+                        root.handle-digit(9);
+                    }
+                }
+            }
+            HorizontalLayout {
+                spacing: 6px;
+                KeypadButton {
+                    label: "4"; clicked => {
+                        root.handle-digit(4);
+                    }
+                }
+                KeypadButton {
+                    label: "5"; clicked => {
+                        root.handle-digit(5);
+                    }
+                }
+                KeypadButton {
+                    label: "6"; clicked => {
+                        root.handle-digit(6);
+                    }
+                }
+            }
+            HorizontalLayout {
+                spacing: 6px;
+                KeypadButton {
+                    label: "1"; clicked => {
+                        root.handle-digit(1);
+                    }
+                }
+                KeypadButton {
+                    label: "2"; clicked => {
+                        root.handle-digit(2);
+                    }
+                }
+                KeypadButton {
+                    label: "3"; clicked => {
+                        root.handle-digit(3);
+                    }
+                }
+            }
+            HorizontalLayout {
+                spacing: 6px;
+                Rectangle { width: 44px; height: 36px; opacity: 0; }
+                KeypadButton {
+                    label: "0"; clicked => {
+                        root.handle-digit(0);
+                    }
+                }
+                Rectangle { width: 44px; height: 36px; opacity: 0; }
+            }
+            HorizontalLayout {
+                spacing: 6px;
+                visible: !root.num-only;
+                KeypadButton {
+                    label: "Del";
+                    clicked => {
+                        root.handle-delete();
+                    }
+                }
+                KeypadButton {
+                    label: "Clr";
+                    clicked => {
+                        root.handle-clear();
+                    }
+                }
+                KeypadButton {
+                    label: ".";
+                    clicked => {
+                        root.handle-decimal();
+                    }
+                }
+                KeypadButton {
+                    label: "-";
+                    clicked => {
+                        root.handle-negative();
+                    }
+                }
+                KeypadButton {
+                    label: "OK";
+                    clicked => { root.handle-ok(); }
+                }
+            }
+        }
+    }
+}
+
+/*
+Component: RDSXYPad
+Description: A 2D XY pad for controlling two parameters simultaneously.
+Public members:
+- value-x: float - X-axis value (0.0 to 1.0)
+- value-y: float - Y-axis value (0.0 to 1.0)
+- pad-background: color - Background color
+- pad-border-color: color - Border color
+- grid-color: color - Color of the grid lines
+- handle-color: color - Color of the touch handle
+- glow-color: color - Color of the handle glow
+- handle-size: length - Size of the handle
+- border-radius: length - Radius of the pad corners
+- grid-lines: int - Number of grid lines
+- value-x-changed(float): callback - Triggered when X changes
+- value-y-changed(float): callback - Triggered when Y changes
+*/
+export component RDSXYPad {
+    in-out property <float> value-x: 0.5;
+    in-out property <float> value-y: 0.5;
+
+    in property <color> pad-background: Theme.active.background_main;
+    in property <color> pad-border-color: Theme.active.border_strong;
+    in property <color> grid-color: Theme.active.border_subtle;
+    in property <color> handle-color: Theme.active.accent_primary;
+    in property <color> glow-color: Theme.active.accent_secondary;
+    in property <length> handle-size: 14px;
+    in property <length> border-radius: 8px;
+    in property <int> grid-lines: 4;
+
+    callback value-x-changed(value: float);
+    callback value-y-changed(value: float);
+
+    width: 200px;
+    height: 200px;
+
+    Rectangle {
+        width: parent.width;
+        height: parent.height;
+        background: root.pad-background;
+        border-radius: root.border-radius;
+        border-color: root.pad-border-color;
+        border-width: 1px;
+        clip: true;
+
+        for i in root.grid-lines : Rectangle {
+            x: parent.width * (i + 1) / (root.grid-lines + 1);
+            width: 1px;
+            height: parent.height;
+            background: root.grid-color;
+        }
+        for i in root.grid-lines : Rectangle {
+            y: parent.height * (i + 1) / (root.grid-lines + 1);
+            width: parent.width;
+            height: 1px;
+            background: root.grid-color;
+        }
+
+        Rectangle {
+            width: root.handle-size;
+            height: root.handle-size;
+            background: root.handle-color;
+            border-radius: root.handle-size / 2;
+            x: root.value-x * (parent.width - root.handle-size);
+            y: (1.0 - root.value-y) * (parent.height - root.handle-size);
+
+            Rectangle {
+                width: root.handle-size + 16px;
+                height: root.handle-size + 16px;
+                background: root.glow-color;
+                border-radius: (root.handle-size + 16px) / 2;
+                x: -8px;
+                y: -8px;
+            }
+        }
+
+        TouchArea {
+            moved => {
+                root.value-x = Math.max(0.0, Math.min(1.0, self.mouse-x / parent.width));
+                root.value-y = 1.0 - Math.max(0.0, Math.min(1.0, self.mouse-y / parent.height));
+                root.value-x-changed(root.value-x);
+                root.value-y-changed(root.value-y);
+            }
+            clicked => {
+                root.value-x = Math.max(0.0, Math.min(1.0, self.mouse-x / parent.width));
+                root.value-y = 1.0 - Math.max(0.0, Math.min(1.0, self.mouse-y / parent.height));
+                root.value-x-changed(root.value-x);
+                root.value-y-changed(root.value-y);
+            }
+        }
+    }
+}
+
+/*
+Component: RDSKeybed
+Description: A virtual musical keyboard (piano keys).
+Public members:
+- octaves: int - Number of octaves to display
+- scale: string - Highlighted scale ("chromatic", "major", "minor", "pentatonic", "blues")
+- size: length - Width of a single white key
+- base-note: int - MIDI note number for the first key
+- note-triggered(int): callback - Triggered when a key is pressed
+*/
+export component RDSKeybed {
+    in property <int> octaves: 2;
+    in property <string> scale: "chromatic";
+    in property <length> size: 20px;
+    in property <int> base-note: 48;
+    callback note-triggered(note: int);
+
+    width: root.octaves * root.size * 7;
+    height: root.size * 4;
+
+    private property <length> white-key-height: root.size * 4;
+    private property <length> black-key-height: root.size * 2.5;
+
+    HorizontalLayout {
+        spacing: 0px;
+        width: parent.width;
+        height: root.height;
+
+        for o in root.octaves : Rectangle {
+            width: root.size * 7;
+            height: root.height;
+            background: transparent;
+
+            HorizontalLayout {
+                spacing: 0px;
+                width: parent.width;
+                height: root.height;
+
+                for i in 7 : KeybedKey {
+                    key-width: root.size;
+                    key-height: root.white-key-height;
+                    scale: root.scale;
+                    base-note: root.base-note;
+                    octave: o;
+                    semitone:
+                        i == 0 ? 0 :
+                        i == 1 ? 2 :
+                        i == 2 ? 4 :
+                        i == 3 ? 5 :
+                        i == 4 ? 7 :
+                        i == 5 ? 9 : 11;
+                    note:
+                        root.base-note + o * 12 +
+                        (i == 0 ? 0 :
+                         i == 1 ? 2 :
+                         i == 2 ? 4 :
+                         i == 3 ? 5 :
+                         i == 4 ? 7 :
+                         i == 5 ? 9 : 11);
+                    triggered(note) => { root.note-triggered(note); }
+                }
+            }
+
+            KeybedKey {
+                is-black: true;
+                key-width: root.size * 0.6;
+                key-height: root.black-key-height;
+                scale: root.scale;
+                base-note: root.base-note;
+                octave: o;
+                semitone: 1;
+                note: root.base-note + o * 12 + 1;
+                x: root.size * 0.7;
+                y: 0px;
+                triggered(note) => { root.note-triggered(note); }
+            }
+            KeybedKey {
+                is-black: true;
+                key-width: root.size * 0.6;
+                key-height: root.black-key-height;
+                scale: root.scale;
+                base-note: root.base-note;
+                octave: o;
+                semitone: 3;
+                note: root.base-note + o * 12 + 3;
+                x: root.size * 1.7;
+                y: 0px;
+                triggered(note) => { root.note-triggered(note); }
+            }
+            KeybedKey {
+                is-black: true;
+                key-width: root.size * 0.6;
+                key-height: root.black-key-height;
+                scale: root.scale;
+                base-note: root.base-note;
+                octave: o;
+                semitone: 6;
+                note: root.base-note + o * 12 + 6;
+                x: root.size * 3.7;
+                y: 0px;
+                triggered(note) => { root.note-triggered(note); }
+            }
+            KeybedKey {
+                is-black: true;
+                key-width: root.size * 0.6;
+                key-height: root.black-key-height;
+                scale: root.scale;
+                base-note: root.base-note;
+                octave: o;
+                semitone: 8;
+                note: root.base-note + o * 12 + 8;
+                x: root.size * 4.7;
+                y: 0px;
+                triggered(note) => { root.note-triggered(note); }
+            }
+            KeybedKey {
+                is-black: true;
+                key-width: root.size * 0.6;
+                key-height: root.black-key-height;
+                scale: root.scale;
+                base-note: root.base-note;
+                octave: o;
+                semitone: 10;
+                note: root.base-note + o * 12 + 10;
+                x: root.size * 5.7;
+                y: 0px;
+                triggered(note) => { root.note-triggered(note); }
+            }
+        }
+    }
+}

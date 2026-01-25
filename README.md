@@ -1,6 +1,6 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.9-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.10-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
@@ -13,14 +13,20 @@ Built with a focus on:
 
 ## Components Included
 
-### `RDSSelectButton`
+### `RDSButton`
 
-A small selectable button with active state.
+A standard button component with customizable labeling and styling.
 
 **[Properties]**
 
 - `label: string`
 - `active: bool`
+- `button-width: length` (Default: `42px`)
+- `button-height: length` (Default: `28px`)
+- `text-color: color` (Default: `Theme.active.text_primary`)
+- `background: color` (Default: `Theme.active.background_main`)
+- `border-color: color` (Default: `Theme.active.border_strong`)
+- `border-radius: length` (Default: `Theme.active.radius_medium`)
 
 **[Callbacks]**
 
@@ -29,10 +35,38 @@ A small selectable button with active state.
 **[Example]**
 
 ```slint
+RDSButton {
+    label: "Apply";
+    clicked => { do-something(); }
+}
+```
+
+---
+
+### `RDSSelectButton`
+
+A larger selectable button with active state and shift-click support.
+
+**[Properties]**
+
+- `label: string`
+- `active: bool`
+- `button-width: length` (Default: `80px`)
+- `button-height: length` (Default: `28px`)
+
+**[Callbacks]**
+
+- `clicked()`
+- `shift-clicked()`
+
+**[Example]**
+
+```slint
 RDSSelectButton {
     label: "Mute";
     active: is-muted;
     clicked => { is-muted = !is-muted; }
+    shift-clicked => { solo-track(); }
 }
 ```
 
@@ -71,6 +105,7 @@ Horizontal and vertical VU meters.
 
 - `level: float` (0.0 – 1.0 recommended)
 - `fill-color: color` (Defaults to `Theme.active.meter_normal`)
+- `vu-border-width: length` (Default: `2px`)
 
 **[Example]**
 
@@ -113,7 +148,14 @@ A toggle button that displays different Material Icons based on its state.
 - `active: bool`
 - `on-icon: string` (Default: "stop")
 - `off-icon: string` (Default: "play_arrow")
-- `icon-color: color` (Default: `Theme.active.text_primary`)
+- `background: color` (Default: `Theme.active.background_main`)
+- `active-background: color` (Default: `Theme.active.accent_primary`)
+- `border-color: color` (Default: `Theme.active.border_strong`)
+- `active-border-color: color` (Default: `Theme.active.accent_primary`)
+- `border-width: length` (Default: `1px`)
+- `active-border-width: length`
+- `text-color: color` (Default: `Theme.active.text_primary`)
+- `icon-color: color` (Defaults to `text-color`)
 - `icon-size: length` (Default: `20px`)
 
 **[Callbacks]**
@@ -149,6 +191,12 @@ A rotary knob supporting bounded and infinite rotation modes.
 - `indicator-color: color`
 - `min-value: float`
 - `max-value: float`
+- `label: string`
+- `label-pos: string` (Default: "bottom-center")
+- `label-txt-color: color`
+- `label-bg-color: color`
+- `label-font-size: length`
+- `label-font-weight: int`
 
 **[Callbacks]**
 
@@ -260,13 +308,24 @@ A numeric selector with increment/decrement buttons and an interactive readout. 
 - `max-value: float` (Default: `300`)
 - `step: float` (Default: `1`)
 - `font-family: string` (Default: `"DSEG7 Classic"`)
+- `readout-background: color`
+- `readout-border-color: color`
+- `readout-border-width: length`
+- `readout-border-radius: length`
+- `readout-width: length`
+- `readout-height: length`
+- `readout-text-color: color`
+- `readout-text-size: length`
+- `readout-text-weight: int`
 - `pad-digits: int` (Default: `3`)
 - `button-tog: bool` (Default: `true`)
+- `allow-editing: bool` (Default: `true`)
 - `button-pos: string` ("top-bottom", "left-right")
 
 **[Callbacks]**
 
 - `value-changed(float)`
+- `readout-double-clicked()`
 
 **[Example]**
 
@@ -276,6 +335,97 @@ RDSNumStepper {
     min-value: 20;
     max-value: 20000;
     button-pos: "left-right";
+}
+```
+
+---
+
+### `RDSXYPad`
+
+A 2D XY pad for controlling two parameters simultaneously.
+
+**[Properties]**
+
+- `value-x: float` (0.0 – 1.0)
+- `value-y: float` (0.0 – 1.0)
+- `pad-background: color`
+- `pad-border-color: color`
+- `grid-color: color`
+- `handle-color: color`
+- `glow-color: color`
+- `handle-size: length`
+- `border-radius: length`
+- `grid-lines: int`
+
+**[Callbacks]**
+
+- `value-x-changed(float)`
+- `value-y-changed(float)`
+
+**[Example]**
+
+```slint
+RDSXYPad {
+    value-x: 0.5;
+    value-y: 0.5;
+    value-x-changed(x) => { debug("X: ", x); }
+    value-y-changed(y) => { debug("Y: ", y); }
+}
+```
+
+---
+
+### `RDSNumericKeypad`
+
+A numeric keypad for entering values, with committed and cleared callbacks.
+
+**[Properties]**
+
+- `current-value: float`
+- `input-text: string`
+- `pad-digits: int`
+- `allow-negative: bool`
+- `num-only: bool`
+
+**[Callbacks]**
+
+- `input-changed(string)`
+- `committed(float)`
+- `cleared()`
+
+**[Example]**
+
+```slint
+RDSNumericKeypad {
+    current-value: 120.0;
+    committed(v) => { debug("Committed: ", v); }
+}
+```
+
+---
+
+### `RDSKeybed`
+
+A virtual musical keyboard (piano keys).
+
+**[Properties]**
+
+- `octaves: int` (Default: `2`)
+- `scale: string` ("chromatic", "major", "minor", "pentatonic", "blues")
+- `size: length` (Width of white keys)
+- `base-note: int` (MIDI base note, default: `48`)
+
+**[Callbacks]**
+
+- `note-triggered(int)`
+
+**[Example]**
+
+```slint
+RDSKeybed {
+    octaves: 3;
+    base-note: 36;
+    note-triggered(n) => { play-note(n); }
 }
 ```
 

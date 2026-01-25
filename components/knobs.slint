@@ -6,7 +6,7 @@ Description: A rotary knob component that supports both bounded and infinite rot
 Public members:
 - renderer: string - "hi-fi" (default) or "lo-fi"
 - indicator: string - "circle" (default), "line", or "caret"
-- indicator-color: color - color for lo-fi indicators
+- indicator-color: color - color for indicators
 - value: float - Current value
 - rotation-angle: angle - Current rotation angle
 - size: length - Size of the knob (width and height are bounded to this)
@@ -15,11 +15,20 @@ Public members:
 - scroll-sensitivity: float - Sensitivity for mouse scroll wheel
 - min-value: float - Minimum value (set equal to max-value for infinite mode - if not set, defaults to infinite)
 - max-value: float - Maximum value (set equal to min-value for infinite mode - if not set, defaults to infinite)
+- label: string - Text label for the knob
+- label-pos: string - Position of the label ("top-left", "top-center", "top-right", "center-left", "center-center", "center-right", "bottom-left", "bottom-center", "bottom-right")
+- label-width: length - Custom width for label area
+- label-height: length - Custom height for label area
+- label-txt-color: color - Color of the label text
+- label-bg-color: color - Background color of the label area
+- label-font-size: length - Font size for the label
+- label-font-weight: int - Font weight for the label
 - value-changed(float): callback - Triggered when the value changes via user interaction
 
 Example usage:
-- Basic bounded knob:
+- Basic bounded knob with label:
     RDSKnob {
+        label: "Gain";
         size: 64px;
         indicator-position: 20px;
         min-value: 0;
@@ -39,6 +48,14 @@ export component RDSKnob inherits Rectangle {
     in-out property <string> renderer: "hi-fi";
     in-out property <string> indicator: "circle";
     in-out property <color> indicator-color: #b9b9bf;
+    in-out property <string> label: "";
+    in-out property <length> label-width: root.size;
+    in-out property <length> label-height: root.label-font-size + 8px;
+    in-out property <color> label-txt-color: Theme.active.ui_label_txt;
+    in-out property <color> label-bg-color: transparent;
+    in-out property <length> label-font-size: 11px;
+    in-out property <int> label-font-weight: 400;
+    in-out property <string> label-pos: "bottom-center";
 
     in-out property <float> min-value: 0;
     in-out property <float> max-value: 0;
@@ -48,6 +65,19 @@ export component RDSKnob inherits Rectangle {
     private property <length> drag-start-y: 0px;
     private property <float> drag-start-value: 0;
     private property <bool> is-infinite: root.min-value == root.max-value;
+
+    private property <length> label-x:
+        root.label-pos == "top-left" || root.label-pos == "center-left" || root.label-pos == "bottom-left"
+            ? -root.label-width - 4px
+            : (root.label-pos == "top-right" || root.label-pos == "center-right" || root.label-pos == "bottom-right"
+                ? root.width + 4px
+                : (root.width - root.label-width) / 2);
+    private property <length> label-y:
+        root.label-pos == "top-left" || root.label-pos == "top-center" || root.label-pos == "top-right"
+            ? -root.label-height - 4px
+            : (root.label-pos == "center-left" || root.label-pos == "center-center" || root.label-pos == "center-right"
+                ? (root.height - root.label-height) / 2
+                : root.height + 4px);
 
     width: root.size;
     height: root.size;
@@ -69,6 +99,23 @@ export component RDSKnob inherits Rectangle {
         height: root.size;
         image-fit: contain;
         source: Theme.active.knob_body_svg;
+    }
+
+    Rectangle {
+        visible: root.label != "";
+        x: root.label-x;
+        y: root.label-y;
+        width: root.label-width;
+        height: root.label-height;
+        background: root.label-bg-color;
+        Text {
+            text: root.label;
+            color: root.label-txt-color;
+            font-size: root.label-font-size;
+            font-weight: root.label-font-weight;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
     }
 
     // Position/value indicator - size scales with knob size

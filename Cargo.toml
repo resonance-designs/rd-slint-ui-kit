@@ -1,6 +1,6 @@
 [package]
 name = "rds-slint-ui-kit"
-version = "0.1.9"
+version = "0.1.10"
 authors = ["Richard Bakos <info@resonancedesigns.dev>"]
 description = "Reusable Slint UI components for audio tools, sequencers, and creative applications"
 readme = "README.md"
@@ -13,6 +13,7 @@ license = "MIT"
 include = [
     "components/**/*.slint",
     "theme/**/*.slint",
+    "theme/assets/**/*",
     "src/**/*.rs",
     "build.rs",
     "Cargo.toml",

@@ -1,8 +1,12 @@
 {
   "name": "@resonance-designs/rds-slint-ui-kit",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "Reusable Slint UI components for audio and creative apps",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/resonance-designs/rds-slint-ui-kit.git"
+  },
   "type": "module",
   "publishConfig": {
     "access": "public"
@@ -12,7 +16,8 @@
   },
   "files": [
     "components/**/*.slint",
-    "theme/**/*.slint"
+    "theme/**/*.slint",
+    "theme/assets/**/*"
   ],
   "exports": {
     ".": "./components/index.slint",

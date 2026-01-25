@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.1.10] - 2026-01-25
+
+- Added new components:
+  - `RDSButton`: A standard customizable button.
+  - `RDSXYPad`: A 2D pad for controlling dual parameters.
+  - `RDSNumericKeypad`: A full numeric keypad for value entry.
+  - `RDSKeybed`: A virtual piano keyboard for MIDI interaction.
+- Enhanced existing components:
+  - `RDSKnob`: Added a comprehensive labeling system with customizable positioning and styling.
+  - `RDSSelectButton`: Added `shift-clicked` support and configurable dimensions.
+  - `RDSToggle`: Added more styling properties for background, border, and icons.
+  - `RDSNumStepper`: Added `allow-editing` toggle and double-click callbacks.
+  - `RDSVUMeter` / `RDSVertVUMeter`: Added `vu-border-width` property.
+  - `RDSSlider`: Improved documentation and internal structure.
+- Documentation & Distribution:
+  - Rewrote internal `.slint` documentation comments for better clarity and tooling support.
+  - Fully updated `README.md` with all new components and property details.
+  - Updated `Cargo.toml` and `package.json` to ensure all theme assets (fonts, SVGs) are included in releases.
+
 ## [0.1.9] - 2026-01-21
 
 - Added documentation for `RDSHeaderLabel` and `RDSComboBox` to `README.md`.
