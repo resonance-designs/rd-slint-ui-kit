@@ -631,6 +631,11 @@ A comprehensive documentation site built with Docusaurus is available in the `do
 
 The documentation includes a **Live Wasm Demo** where you can interact with the components directly in your browser.
 
+### Key Features of the Demo:
+- **Component Showcase**: Explore all visualizers (Oscilloscope, Spectrum, Vectorscope) and controls.
+- **Real-time Theme Switching**: Toggle between Light and Dark modes instantly.
+- **Responsive Interaction**: Experience Slint's performance on the web.
+
 ## WebAssembly Demo
 
 The library includes a WebAssembly demo that can be run in the browser.
