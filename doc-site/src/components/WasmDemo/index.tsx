@@ -6,6 +6,8 @@ import styles from './styles.module.css';
 function SlintDemoInner() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wasmUrl = useBaseUrl('/wasm/rds_wasm_demo.js');
+    const initialized = useRef(false);
+    const instanceKey = useRef(Date.now());
 
     useEffect(() => {
         let isMounted = true;
@@ -17,14 +19,30 @@ function SlintDemoInner() {
                 
                 if (!isMounted) return;
 
-                // Initialize the wasm module
-                await init.default();
+                // Initialize the wasm module only once
+                if (!initialized.current) {
+                    await init.default();
+                    initialized.current = true;
+                }
                 
                 if (!isMounted) return;
 
                 // Start the slint application
                 // Note: The function name matches the crate name in snake_case
-                init.main();
+                // We use a small timeout to ensure the DOM is ready for Slint to find the canvas
+                setTimeout(() => {
+                    if (isMounted && canvasRef.current) {
+                        // Ensure canvas internal size matches CSS size for Slint scaling
+                        canvasRef.current.width = canvasRef.current.offsetWidth;
+                        canvasRef.current.height = canvasRef.current.offsetHeight;
+                        
+                        try {
+                            init.main();
+                        } catch (e) {
+                            console.warn('Slint main execution:', e);
+                        }
+                    }
+                }, 100);
             } catch (err) {
                 console.error('Failed to initialize Slint Wasm:', err);
             }
@@ -38,7 +56,7 @@ function SlintDemoInner() {
     }, [wasmUrl]);
 
     return (
-        <div className={styles.demoContainer}>
+        <div className={styles.demoContainer} key={instanceKey.current}>
             <canvas 
                 id="canvas" 
                 ref={canvasRef}
