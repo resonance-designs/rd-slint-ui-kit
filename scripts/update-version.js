@@ -37,6 +37,10 @@ const filesToUpdate = [
     {
         path: 'doc-site/package.json',
         replace: (content, version) => content.replace(/"version":\s*"[^"]+"/, `"version": "${version}"`)
+    },
+    {
+        path: 'wasm-demo/Cargo.toml',
+        replace: (content, version) => content.replace(/^version\s*=\s*"[^"]+"/m, `version = "${version}"`)
     }
 ];
 

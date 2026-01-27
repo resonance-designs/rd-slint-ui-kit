@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.12] - 2026-01-26
+
+- **Documentation & Wasm Integration**:
+  - Migrated entire documentation site to Docusaurus with MDX support.
+  - Integrated a live WebAssembly demo directly into the documentation site.
+  - Converted all `.md` documentation files to `.mdx`.
+  - Resolved multiple broken links and optimized documentation navigation.
+- **Wasm Demo**: Added dedicated `wasm-demo/` crate with full toolkit showcase.
+- **Enhanced `RDSButton`**: Added `layout-stretch`, `layout-preferred-width`, `pressed`, and `released` properties/callbacks.
+- **Enhanced `RDSHeaderLabel`**: Added `border-r-tl/tr/bl/br` and `bg-color` properties for more granular styling.
+- **Enhanced `RDSKnob`**: Added full readout support with `readout-enabled`, `readout-mode`, `readout-suffix`, `readout-literals`, and more.
+- **Root README**: Updated with documentation site instructions and live demo info.
+
 ## [0.1.11] - 2026-01-25
 
 - Added a means to add arbitrary content within the `RDSHeaderLabel` container.

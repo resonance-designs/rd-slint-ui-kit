@@ -1,6 +1,6 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.11-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.12-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
@@ -27,10 +27,14 @@ A standard button component with customizable labeling and styling.
 - `background: color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.background_main`)
 - `border-color: color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.border_strong`)
 - `border-radius: length` (Default: `Theme.active.radius_medium`)
+- `layout-stretch: int` (Default: `0`)
+- `layout-preferred-width: length`
 
 **[Callbacks]**
 
 - `clicked()`
+- `pressed()`
+- `released()`
 
 **[Example]**
 
@@ -197,6 +201,19 @@ A rotary knob supporting bounded and infinite rotation modes.
 - `label-bg-color: color`
 - `label-font-size: length`
 - `label-font-weight: int`
+- `infinite-rotary: bool`
+- `readout-enabled: bool` (Default: `true`)
+- `readout-text: string`
+- `readout-mode: string`
+- `readout-suffix: string`
+- `readout-literals: [string]`
+- `readout-pos: string`
+- `readout-width: length`
+- `readout-height: length`
+- `readout-txt-color: color`
+- `readout-bg-color: color`
+- `readout-font-size: length`
+- `readout-font-weight: int`
 
 **[Callbacks]**
 
@@ -260,6 +277,11 @@ A styled header label with background, padding, and a right-side slot for child 
 - `padding-vertical: length` (Default: `4px`)
 - `right-padding: length` (Default: `8px`)
 - `right-gap: length` (Default: `6px`)
+- `bg-color: color`
+- `border-r-tl: length`
+- `border-r-tr: length`
+- `border-r-bl: length`
+- `border-r-br: length`
 
 **[Example]**
 
@@ -590,6 +612,42 @@ VerticalLayout {
 }
 ```
 
+## Documentation
+
+A comprehensive documentation site built with Docusaurus is available in the `doc-site` directory.
+
+### Running the Documentation Site Locally
+
+1. **Install dependencies**:
+   ```bash
+   cd doc-site
+   npm install
+   ```
+
+2. **Start the server**:
+   ```bash
+   npm start
+   ```
+
+The documentation includes a **Live Wasm Demo** where you can interact with the components directly in your browser.
+
+## WebAssembly Demo
+
+The library includes a WebAssembly demo that can be run in the browser.
+
+### Building the Demo
+
+1. **Install wasm-pack**: `cargo install wasm-pack`
+2. **Add Wasm target**: `rustup target add wasm32-unknown-unknown`
+3. **Build**:
+
+    ```bash
+    cd wasm-demo
+    wasm-pack build --target web
+    ```
+
+4. **Run**: Serve the `wasm-demo` directory using a local web server (e.g., `npx serve .`).
+
 ## Installation (Planned)
 
 This library is intended to be distributed via:
@@ -602,9 +660,9 @@ This library is intended to be distributed via:
 - [x] npm package with .slint exports
 - [x] Rust crate wrapping Slint resources
 - [x] Theming support
-- [ ] Additional UI components
-- [ ] Documentation site & screenshots
-- [ ] Demo application using the UI library
+- [x] Demo application using the UI library
+- [x] Documentation site & screenshots
+- [ ] Additional UI components (Tabs, Menus, specialized visualizers)
 
 ## License
 

@@ -1,0 +1,210 @@
+import { ScrollView } from "std-widgets.slint";
+import { Theme } from "../../theme/index.slint";
+import { 
+    RDSButton, 
+    RDSSelectButton, 
+    RDSKnob, 
+    RDSSlider, 
+    RDSToggle, 
+    RDSCircleToggle,
+    RDSHeaderLabel,
+    RDSVUMeter,
+    RDSVertVUMeter,
+    RDSWaveformViz,
+    RDSOscilloscopeViz,
+    RDSSpectrumViz,
+    RDSVectorscopeViz,
+    RDSSequencerCell,
+    RDSComboBox,
+    RDSNumStepper,
+    RDSXYPad,
+    RDSNumericKeypad,
+    RDSKeybed
+} from "../../components/index.slint";
+
+export component DemoWindow inherits Window {
+    title: "RDS UI Kit Demo";
+    width: 1200px;
+    height: 1000px;
+    background: Theme.active.background_main;
+
+    VerticalLayout {
+        padding: 30px;
+        spacing: 30px;
+
+        RDSHeaderLabel {
+            text: "RDS Slint UI Kit - Wasm Demo";
+        }
+
+        HorizontalLayout {
+            spacing: 30px;
+
+            // --- Column 1: Buttons & Selectors ---
+            VerticalLayout {
+                spacing: 20px;
+                width: 250px;
+
+                RDSHeaderLabel { text: "Buttons"; }
+
+                HorizontalLayout {
+                    spacing: 10px;
+                    RDSButton {
+                        label: "Standard";
+                    }
+                    RDSButton {
+                        label: "Active";
+                        active: true;
+                    }
+                }
+
+                RDSSelectButton {
+                    label: "Toggle Select";
+                    clicked => { self.active = !self.active; }
+                }
+
+                RDSHeaderLabel { text: "Selectors"; }
+                
+                RDSComboBox {
+                    model: ["Option 1", "Option 2", "Option 3"];
+                    current-index: 0;
+                }
+
+                RDSNumStepper {
+                    value: 120;
+                    min-value: 20;
+                    max-value: 300;
+                }
+
+                HorizontalLayout {
+                    spacing: 8px;
+                    for i in 4: RDSSequencerCell {
+                        active: i == 0 || i == 2;
+                        clicked => { self.active = !self.active; }
+                    }
+                }
+            }
+
+            // --- Column 2: Continuous Controls ---
+            VerticalLayout {
+                spacing: 20px;
+                width: 300px;
+
+                RDSHeaderLabel { text: "Controls"; }
+
+                HorizontalLayout {
+                    spacing: 25px;
+
+                    VerticalLayout {
+                        spacing: 8px;
+                        Text { text: "Gain"; color: Theme.active.text_secondary; font-size: 11px; horizontal-alignment: center; }
+                        RDSKnob {
+                            value: 65;
+                            size: 70px;
+                        }
+                    }
+
+                    VerticalLayout {
+                        spacing: 8px;
+                        Text { text: "Fader"; color: Theme.active.text_secondary; font-size: 11px; horizontal-alignment: center; }
+                        RDSSlider {
+                            value: 90;
+                            height-override: 180px;
+                        }
+                    }
+                }
+
+                HorizontalLayout {
+                    spacing: 20px;
+                    VerticalLayout {
+                        spacing: 8px;
+                        Text { text: "Master FX"; color: Theme.active.text_secondary; font-size: 11px; }
+                        RDSToggle {
+                            active: true;
+                            clicked => { self.active = !self.active; }
+                        }
+                    }
+                    VerticalLayout {
+                        spacing: 8px;
+                        Text { text: "Power"; color: Theme.active.text_secondary; font-size: 11px; }
+                        RDSCircleToggle {
+                            active: true;
+                            clicked => { self.active = !self.active; }
+                        }
+                    }
+                }
+            }
+
+            // --- Column 3: Viz & Pads ---
+            VerticalLayout {
+                spacing: 20px;
+                width: 400px;
+
+                RDSHeaderLabel { text: "Visuals"; }
+
+                HorizontalLayout {
+                    spacing: 20px;
+                    RDSVUMeter {
+                        level: 0.7;
+                        width: 150px;
+                    }
+                    RDSVertVUMeter {
+                        level: 0.5;
+                    }
+                }
+
+                RDSWaveformViz {
+                    waveform: [0.1, 0.4, 0.2, 0.8, 0.5, 0.3, 0.7, 0.2, 0.4, 0.1];
+                    height: 60px;
+                }
+
+                HorizontalLayout {
+                    spacing: 10px;
+                    RDSOscilloscopeViz {
+                        oscilloscope: [0.1, 0.5, -0.3, 0.8, -0.2, 0.4, -0.6, 0.3];
+                        height: 60px;
+                        width: 100px;
+                    }
+                    RDSSpectrumViz {
+                        spectrum: [0.2, 0.4, 0.8, 0.6, 0.3, 0.5, 0.9, 0.4];
+                        height: 60px;
+                        width: 100px;
+                    }
+                    RDSVectorscopeViz {
+                        vectorscope_x: [0.1, 0.5, 0.8, 0.2, -0.3, -0.7];
+                        vectorscope_y: [0.2, 0.6, 0.3, -0.1, -0.5, -0.2];
+                        height: 60px;
+                        width: 60px;
+                    }
+                }
+
+                VerticalLayout {
+                    spacing: 8px;
+                    Text { text: "Filter XY"; color: Theme.active.text_secondary; font-size: 11px; }
+                    RDSXYPad {
+                        width: 180px;
+                        height: 180px;
+                    }
+                }
+            }
+        }
+
+        // --- Row 2: Large Inputs ---
+        HorizontalLayout {
+            spacing: 30px;
+            VerticalLayout {
+                spacing: 10px;
+                RDSHeaderLabel { text: "Keypad"; }
+                RDSNumericKeypad {
+                    current-value: 440.0;
+                }
+            }
+            VerticalLayout {
+                spacing: 10px;
+                RDSHeaderLabel { text: "Keybed"; }
+                RDSKeybed {
+                    octaves: 2;
+                }
+            }
+        }
+    }
+}
