@@ -1,6 +1,6 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.10-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.12-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
@@ -24,20 +24,24 @@ A standard button component with customizable labeling and styling.
 - `button-width: length` (Default: `42px`)
 - `button-height: length` (Default: `28px`)
 - `text-color: color` (Default: `Theme.active.text_primary`)
-- `background: color` (Default: `Theme.active.background_main`)
-- `border-color: color` (Default: `Theme.active.border_strong`)
+- `background: color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.background_main`)
+- `border-color: color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.border_strong`)
 - `border-radius: length` (Default: `Theme.active.radius_medium`)
+- `layout-stretch: int` (Default: `0`)
+- `layout-preferred-width: length`
 
 **[Callbacks]**
 
 - `clicked()`
+- `pressed()`
+- `released()`
 
 **[Example]**
 
 ```slint
 RDSButton {
     label: "Apply";
-    clicked => { do-something(); }
+    clicked => { do_something(); }
 }
 ```
 
@@ -66,7 +70,7 @@ RDSSelectButton {
     label: "Mute";
     active: is-muted;
     clicked => { is-muted = !is-muted; }
-    shift-clicked => { solo-track(); }
+    shift-clicked => { solo_track(); }
 }
 ```
 
@@ -197,6 +201,19 @@ A rotary knob supporting bounded and infinite rotation modes.
 - `label-bg-color: color`
 - `label-font-size: length`
 - `label-font-weight: int`
+- `infinite-rotary: bool`
+- `readout-enabled: bool` (Default: `true`)
+- `readout-text: string`
+- `readout-mode: string`
+- `readout-suffix: string`
+- `readout-literals: [string]`
+- `readout-pos: string`
+- `readout-width: length`
+- `readout-height: length`
+- `readout-txt-color: color`
+- `readout-bg-color: color`
+- `readout-font-size: length`
+- `readout-font-weight: int`
 
 **[Callbacks]**
 
@@ -249,7 +266,7 @@ RDSSlider {
 
 ### `RDSHeaderLabel`
 
-A styled header label with background and padding.
+A styled header label with background, padding, and a right-side slot for child components.
 
 **[Properties]**
 
@@ -258,12 +275,22 @@ A styled header label with background and padding.
 - `vertical-alignment: enum` (Default: `center`)
 - `padding-horizontal: length` (Default: `8px`)
 - `padding-vertical: length` (Default: `4px`)
+- `right-padding: length` (Default: `8px`)
+- `right-gap: length` (Default: `6px`)
+- `bg-color: color`
+- `border-r-tl: length`
+- `border-r-tr: length`
+- `border-r-bl: length`
+- `border-r-br: length`
 
 **[Example]**
 
 ```slint
 RDSHeaderLabel {
     text: "OSCILLATOR 1";
+    RDSCircleToggle {
+        active: true;
+    }
 }
 ```
 
@@ -317,7 +344,7 @@ A numeric selector with increment/decrement buttons and an interactive readout. 
 - `readout-text-color: color`
 - `readout-text-size: length`
 - `readout-text-weight: int`
-- `pad-digits: int` (Default: `3`)
+- `pad-digits: int` (Default: `3`, max: 3)
 - `button-tog: bool` (Default: `true`)
 - `allow-editing: bool` (Default: `true`)
 - `button-pos: string` ("top-bottom", "left-right")
@@ -425,7 +452,7 @@ A virtual musical keyboard (piano keys).
 RDSKeybed {
     octaves: 3;
     base-note: 36;
-    note-triggered(n) => { play-note(n); }
+    note-triggered(n) => { play_note(n); }
 }
 ```
 
@@ -585,6 +612,47 @@ VerticalLayout {
 }
 ```
 
+## Documentation
+
+A comprehensive documentation site built with Docusaurus is available in the `doc-site` directory.
+
+### Running the Documentation Site Locally
+
+1. **Install dependencies**:
+   ```bash
+   cd doc-site
+   npm install
+   ```
+
+2. **Start the server**:
+   ```bash
+   npm start
+   ```
+
+The documentation includes a **Live Wasm Demo** where you can interact with the components directly in your browser.
+
+### Key Features of the Demo:
+- **Component Showcase**: Explore all visualizers (Oscilloscope, Spectrum, Vectorscope) and controls.
+- **Real-time Theme Switching**: Toggle between Light and Dark modes instantly.
+- **Responsive Interaction**: Experience Slint's performance on the web.
+
+## WebAssembly Demo
+
+The library includes a WebAssembly demo that can be run in the browser.
+
+### Building the Demo
+
+1. **Install wasm-pack**: `cargo install wasm-pack`
+2. **Add Wasm target**: `rustup target add wasm32-unknown-unknown`
+3. **Build**:
+
+    ```bash
+    cd wasm-demo
+    wasm-pack build --target web
+    ```
+
+4. **Run**: Serve the `wasm-demo` directory using a local web server (e.g., `npx serve .`).
+
 ## Installation (Planned)
 
 This library is intended to be distributed via:
@@ -597,9 +665,9 @@ This library is intended to be distributed via:
 - [x] npm package with .slint exports
 - [x] Rust crate wrapping Slint resources
 - [x] Theming support
-- [ ] Additional UI components
-- [ ] Documentation site & screenshots
-- [ ] Demo application using the UI library
+- [x] Demo application using the UI library
+- [x] Documentation site & screenshots
+- [ ] Additional UI components (Tabs, Menus, specialized visualizers)
 
 ## License
 

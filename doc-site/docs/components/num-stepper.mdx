@@ -1,0 +1,42 @@
+# RDSNumStepper
+
+A numeric selector with increment/decrement buttons and an interactive readout. Supports vertical drag, mouse scroll, and double-click for manual entry.
+
+## Properties
+
+- **value**: `float` (Default: `120`)
+- **min-value**: `float` (Default: `20`)
+- **max-value**: `float` (Default: `300`)
+- **step**: `float` (Default: `1`)
+- **font-family**: `string` (Default: `"DSEG7 Classic"`)
+- **readout-background**: `color`
+- **readout-border-color**: `color`
+- **readout-border-width**: `length`
+- **readout-border-radius**: `length`
+- **readout-width**: `length`
+- **readout-height**: `length`
+- **readout-text-color**: `color`
+- **readout-text-size**: `length`
+- **readout-text-weight**: `int`
+- **pad-digits**: `int` (Default: `3`, max: 3)
+- **button-tog**: `bool` (Default: `true`)
+- **allow-editing**: `bool` (Default: `true`)
+- **button-pos**: `string` ("top-bottom", "left-right")
+
+## Callbacks
+
+- **value-changed(float)**: Triggered when the value changes.
+- **readout-double-clicked()**: Triggered when the readout is double-clicked.
+
+## Example
+
+```slint
+import { RDSNumStepper } from "rds-slint-ui-kit/components/index.slint";
+
+RDSNumStepper {
+    value: 440;
+    min-value: 20;
+    max-value: 20000;
+    button-pos: "left-right";
+}
+```

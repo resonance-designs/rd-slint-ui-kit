@@ -362,7 +362,6 @@ export component RDSNumericKeypad {
             }
             HorizontalLayout {
                 spacing: 6px;
-                visible: !root.num-only;
                 KeypadButton {
                     label: "Del";
                     clicked => {
@@ -377,12 +376,14 @@ export component RDSNumericKeypad {
                 }
                 KeypadButton {
                     label: ".";
+                    visible: !root.num-only;
                     clicked => {
                         root.handle-decimal();
                     }
                 }
                 KeypadButton {
                     label: "-";
+                    visible: root.allow-negative;
                     clicked => {
                         root.handle-negative();
                     }

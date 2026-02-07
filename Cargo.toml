@@ -1,6 +1,6 @@
 [package]
 name = "rds-slint-ui-kit"
-version = "0.1.10"
+version = "0.1.12"
 authors = ["Richard Bakos <info@resonancedesigns.dev>"]
 description = "Reusable Slint UI components for audio tools, sequencers, and creative applications"
 readme = "README.md"
@@ -22,7 +22,13 @@ include = [
 ]
 
 [dependencies]
-slint = "1.4"
+slint = "1.14"
 
 [build-dependencies]
-slint-build = "1.4"
+slint-build = "1.14"
+
+[workspace]
+members = [
+    ".",
+    "wasm-demo"
+]
