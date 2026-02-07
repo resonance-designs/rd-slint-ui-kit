@@ -1,0 +1,40 @@
+# RDSButton
+
+A standard button component with customizable labeling and styling.
+
+## Properties
+
+- **label**: `string` - Text label for the button
+- **label-padding-top**: `length` (Default: `4px`)
+- **label-padding-right**: `length` (Default: `4px`)
+- **label-padding-bottom**: `length` (Default: `4px`)
+- **label-padding-left**: `length` (Default: `4px`)
+- **text-color**: `color` (Default: `Theme.active.text_primary`)
+- **horizontal-alignment**: `enum` (Default: `center`)
+- **vertical-alignment**: `enum` (Default: `center`)
+- **active**: `bool` - Active state of the button
+- **button-width**: `length` (Default: `42px`)
+- **button-height**: `length` (Default: `28px`)
+- **background**: `color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.background_main`)
+- **border-width**: `length` (Default: `1px`)
+- **border-color**: `color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.border_strong`)
+- **border-radius**: `length` (Default: `Theme.active.radius_medium`)
+- **layout-stretch**: `int` (Default: `0`)
+- **layout-preferred-width**: `length` (Default: `Math.max(root.button-width, root.content-width)`)
+
+## Callbacks
+
+- **clicked()**: Triggered when the button is clicked.
+- **pressed()**: Triggered when the button is pressed.
+- **released()**: Triggered when the button is released.
+
+## Example
+
+```slint
+import { RDSButton } from "rds-slint-ui-kit/components/index.slint";
+
+RDSButton {
+    label: "Apply";
+    clicked => { /* do_something */ }
+}
+```

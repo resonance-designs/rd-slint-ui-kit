@@ -33,6 +33,14 @@ const filesToUpdate = [
     {
         path: 'components/index.slint',
         replace: (content, version) => content.replace(/\* Version: [0-9.]+/g, `* Version: ${version}`)
+    },
+    {
+        path: 'doc-site/package.json',
+        replace: (content, version) => content.replace(/"version":\s*"[^"]+"/, `"version": "${version}"`)
+    },
+    {
+        path: 'wasm-demo/Cargo.toml',
+        replace: (content, version) => content.replace(/^version\s*=\s*"[^"]+"/m, `version = "${version}"`)
     }
 ];
 
