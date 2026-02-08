@@ -6,7 +6,7 @@
 - Setup GitHub Actions for doc-site automatic deployment to GitHub Pages.
 - Fixed typos in GitHub project name and URL.
 - **Enhanced `RDSNumericKeypad`**: Simplified it to avoid stackoverflow issues.
-- **Enhanced `RDSKeybed`**: 
+- **Enhanced `RDSKeybed`**:
   - Added "scale masking" (`scale-mask`) prop to highlight/dim various keys of the keybed.
   - Added "scaled dividing" (`scale_divisor`) prop to handle setting scales to the keybed.
 - Updated WASM Live Demo of the components

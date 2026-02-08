@@ -13,6 +13,16 @@ docusaurus:
   permalink: /docusaurus
   description: Docusaurus tag description
 
+release:
+  label: Release
+  permalink: /release
+  description: Release posts
+
+update:
+  label: Update
+  permalink: /update
+  description: Update posts
+
 hola:
   label: Hola
   permalink: /hola
