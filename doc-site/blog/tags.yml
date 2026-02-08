@@ -1,3 +1,18 @@
+release:
+  label: Release
+  permalink: /release
+  description: Release posts
+
+update:
+  label: Update
+  permalink: /update
+  description: Update posts
+
+docusaurus:
+  label: Docusaurus
+  permalink: /docusaurus
+  description: Docusaurus tag description
+
 facebook:
   label: Facebook
   permalink: /facebook
@@ -7,11 +22,6 @@ hello:
   label: Hello
   permalink: /hello
   description: Hello tag description
-
-docusaurus:
-  label: Docusaurus
-  permalink: /docusaurus
-  description: Docusaurus tag description
 
 hola:
   label: Hola
