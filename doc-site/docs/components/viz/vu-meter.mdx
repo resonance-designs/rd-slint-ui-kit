@@ -4,11 +4,15 @@ Horizontal and vertical VU meters for signal level visualization.
 
 ## RDSVUMeter (Horizontal)
 
+A horizontal signal level indicator.
+
 ### Properties
 
 - **level**: `float` (0.0 – 1.0 recommended)
 - **fill-color**: `color` (Defaults to `Theme.active.meter_normal`)
 - **vu-border-width**: `length` (Default: `2px`)
+- **width**: `length` (Default: `140px`)
+- **height**: `length` (Default: `10px`)
 
 ### Example
 
@@ -22,9 +26,15 @@ RDSVUMeter {
 
 ## RDSVertVUMeter (Vertical)
 
+A vertical signal level indicator. Fills from bottom to top.
+
 ### Properties
 
-- Same as `RDSVUMeter`.
+- **level**: `float` (0.0 – 1.0 recommended)
+- **fill-color**: `color` (Defaults to `Theme.active.meter_normal`)
+- **vu-border-width**: `length` (Default: `2px`)
+- **width**: `length` (Default: `12px`)
+- **height**: `length` (Default: `88px`)
 
 ### Example
 

@@ -10,8 +10,10 @@ export global ThemeManager {
 
     switch_to_light => {
         Theme.active = LightTheme.values;
+        Theme.is-dark = false;
     }
     switch_to_dark => {
         Theme.active = DarkTheme.values;
+        Theme.is-dark = true;
     }
 }

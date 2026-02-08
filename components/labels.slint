@@ -8,18 +8,19 @@ export component RDSHeaderLabel {
     in property <length> padding-vertical: 4px;
     in property <length> right-padding: 8px;
     in property <length> right-gap: 6px;
-    in property <length> border-r-tl: 4px;
-    in property <length> border-r-tr: 4px;
-    in property <length> border-r-bl: 4px;
-    in property <length> border-r-br: 4px;
+    in property <length> border-r-tl: Theme.active.radius_large;
+    in property <length> border-r-tr: Theme.active.radius_large;
+    in property <length> border-r-bl: Theme.active.radius_large;
+    in property <length> border-r-br: Theme.active.radius_large;
+    in property <length> letter-spacing: 1px;
     in property <color> bg-color: Theme.active.ui-header-label-bg;
+    in property <color> txt-color: Theme.active.text-primary;
     height: 30px;
 
     Rectangle {
         width: parent.width;
         height: parent.height;
         background: root.bg-color;
-        border-radius: Theme.active.radius_large;
         border-top-left-radius: root.border-r-tl;
         border-top-right-radius: root.border-r-tr;
         border-bottom-left-radius: root.border-r-bl;
@@ -30,11 +31,12 @@ export component RDSHeaderLabel {
             width: Math.max(0px, parent.width - (root.padding-horizontal * 2));
             height: Math.max(0px, parent.height - (root.padding-vertical * 2));
             text: root.text;
-            color: Theme.active.ui_header_label_txt;
+            color: root.txt-color;
             font-family: Theme.active.font_body;
             font-size: Theme.active.font_large;
             horizontal-alignment: root.horizontal-alignment;
             vertical-alignment: root.vertical-alignment;
+            letter-spacing: root.letter-spacing;
         }
         right-slot := HorizontalLayout {
             y: root.padding-vertical;

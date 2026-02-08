@@ -1,0 +1,29 @@
+# RDSCircleToggle
+
+A minimal circular toggle indicator.
+
+## Properties
+
+- **active**: `bool`
+- **label**: `string`
+- **label-active**: `string`
+- **label-color**: `color`
+- **label-active-color**: `color`
+- **label-font-size**: `length`
+- **label-font-weight**: `int`
+- **label-pos**: `string` (Default: `"right"`)
+
+## Callbacks
+
+- **clicked()**: Triggered when clicked.
+
+## Example
+
+```slint
+import { RDSCircleToggle } from "rds-slint-ui-kit/components/index.slint";
+
+RDSCircleToggle {
+    active: is-active;
+    clicked => { is-active = !is-active; }
+}
+```

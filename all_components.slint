@@ -1,5 +1,5 @@
 import { ScrollView } from "std-widgets.slint";
-import { Theme, ThemeManager } from "../../theme/index.slint";
+import { Theme, ThemeManager } from "./theme/index.slint";
 import {
     RDSButton,
     RDSSelectButton,
@@ -22,9 +22,9 @@ import {
     RDSXYPad,
     RDSNumericKeypad,
     RDSKeybed
-} from "../../components/index.slint";
+} from "./components/index.slint";
 
-export component DemoWindow inherits Window {
+export component AllComponents inherits Window {
     title: "RDS UI Kit - All Components Gallery - Web Assembly Demo";
     width: 1000px;
     height: 900px;

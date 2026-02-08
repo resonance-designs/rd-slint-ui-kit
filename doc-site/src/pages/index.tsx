@@ -11,12 +11,15 @@ import styles from './index.module.css';
 
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
+  const rdLogoUrl = useBaseUrl('/img/RD_Logo.svg');
+  const slintLogoUrl = useBaseUrl('/img/slint-logo-small-dark.svg');
+
   return (
     <header className={clsx('hero hero--primary', styles.heroBanner)}>
       <div className="container">
         <div className={styles.heroLogoRow}>
           <img
-            src={useBaseUrl('/img/RD_Logo.svg')}
+            src={rdLogoUrl}
             className={styles.heroLogo}
             alt="Resonance Designs Logo"
           />
@@ -24,7 +27,7 @@ function HomepageHeader() {
             {siteConfig.title}
           </Heading>
           <img
-            src={useBaseUrl('/img/slint-logo-small-dark.svg')}
+            src={slintLogoUrl}
             className={styles.heroLogo}
             alt="Slint Logo"
           />
@@ -46,7 +49,7 @@ export default function Home(): ReactNode {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={siteConfig.title}
+      title="Home"
       description={siteConfig.tagline}>
       <HomepageHeader />
       <main>

@@ -15,6 +15,42 @@ Rectangle {
 }
 ```
 
+## Theme Properties
+
+The `RDSTheme` struct defines the following properties:
+
+| Property | Type | Description |
+| :--- | :--- | :--- |
+| `background_main` | `color` | Primary background color |
+| `background_raised` | `color` | Background for elevated elements |
+| `background_hover` | `color` | Background for hovered elements |
+| `border_subtle` | `color` | Light border color |
+| `border_strong` | `color` | Strong border color |
+| `text_primary` | `color` | Primary text color |
+| `text_secondary` | `color` | Secondary/dimmed text color |
+| `accent_primary` | `color` | Primary accent color |
+| `accent_secondary` | `color` | Secondary accent color |
+| `accent_highlight` | `color` | Highlight accent color |
+| `meter_normal` | `color` | VU meter normal range color |
+| `meter_warning` | `color` | VU meter warning range color |
+| `meter_clip` | `color` | VU meter clip range color |
+| `radius_small` | `length` | Small corner radius |
+| `radius_medium` | `length` | Medium corner radius |
+| `radius_large` | `length` | Large corner radius |
+| `font_body` | `string` | Main body font family |
+| `font_readout` | `string` | Readout/numeric font family |
+| `font_icons` | `string` | Icon font family (Material Icons) |
+| `font_small` | `length` | Small font size |
+| `font_medium` | `length` | Medium font size |
+| `font_large` | `length` | Large font size |
+| `ui_header_label_bg` | `color` | Header label background |
+| `ui_header_label_txt` | `color` | Header label text color |
+| `ui_label_bg` | `color` | Generic label background |
+| `ui_label_txt` | `color` | Generic label text color |
+| `ui_device_panel_bg` | `color` | Device panel background |
+| `knob_body_svg` | `image` | SVG for knob body |
+| `knob_indicator_svg` | `image` | SVG for knob indicator |
+
 ## Switching Themes at Runtime
 
 Use the `ThemeManager` global to switch between available themes:
@@ -47,4 +83,17 @@ Button {
     }
     ```
 
-3. Apply it by setting `Theme.active = MyCustomTheme.values;`.
+3. Apply it by setting the `Theme.active` property, typically in your main component's `init` callback:
+
+    ```slint
+    import { Theme } from "rds-slint-ui-kit/theme/index.slint";
+    import { MyCustomTheme } from "./my_theme.slint";
+
+    export component MainWindow inherits Window {
+        init => {
+            Theme.active = MyCustomTheme.values;
+        }
+        
+        // ... your application UI
+    }
+    ```

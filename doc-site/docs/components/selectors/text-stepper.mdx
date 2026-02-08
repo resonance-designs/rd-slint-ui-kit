@@ -1,0 +1,36 @@
+# RDSTextStepper
+
+A stepper component for cycling through a list of string options.
+
+## Properties
+
+- **options**: `[string]` - List of strings to cycle through
+- **index**: `int` - Currently selected index
+- **font-family**: `string`
+- **readout-background**: `color`
+- **readout-border-color**: `color`
+- **readout-border-width**: `length`
+- **readout-border-radius**: `length`
+- **readout-width**: `length`
+- **readout-height**: `length`
+- **readout-text-color**: `color`
+- **readout-text-size**: `length`
+- **readout-text-weight**: `int`
+- **button-tog**: `bool` (Default: `true`)
+- **button-pos**: `string` ("left-right", "top-bottom")
+
+## Callbacks
+
+- **index-changed(int)**: Triggered when the index changes.
+
+## Example
+
+```slint
+import { RDSTextStepper } from "rds-slint-ui-kit/components/index.slint";
+
+RDSTextStepper {
+    options: ["Low", "Medium", "High"];
+    index: 1;
+    index-changed(i) => { /* handle change */ }
+}
+```

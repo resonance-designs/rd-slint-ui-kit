@@ -16,11 +16,7 @@ Public members:
 - border-width: length - Width of the border
 - border-color: color - Color of the border
 - border-radius: length - Radius of the corners
-- layout-stretch: int - Layout stretch factor
-- layout-preferred-width: length - Preferred width for layouts
 - clicked(): callback - Triggered when the button is clicked
-- pressed(): callback - Triggered when the button is pressed
-- released(): callback - Triggered when the button is released
 */
 export component RDSButton {
     in property <string> label;
@@ -38,8 +34,6 @@ export component RDSButton {
     in property <length> border-width: 1px;
     in property <color> border-color: root.active ? Theme.active.accent_primary : Theme.active.border_strong;
     in property <length> border-radius: Theme.active.radius_medium;
-    in property <int> layout-stretch: 0;
-    in property <length> layout-preferred-width: Math.max(root.button-width, root.content-width);
     callback clicked();
     callback pressed();
     callback released();
@@ -50,7 +44,7 @@ export component RDSButton {
     Rectangle {
         width: parent.width;
         height: parent.height;
-        background: touch.pressed ? (root.active ? Theme.active.accent_secondary : Theme.active.background_hover) : (touch.has-hover ? Theme.active.background_hover : root.background);
+        background: touch.pressed ? (root.active ? Theme.active.accent_secondary : Theme.active.background_hover) : (touch.has-hover ? (root.active ? Theme.active.accent_highlight : Theme.active.background_hover) : root.background);
         border-width: root.border-width;
         border-color: root.border-color;
         border-radius: root.border-radius;
@@ -106,6 +100,8 @@ Public members:
 export component RDSSelectButton {
     in property <string> label;
     in property <bool> active;
+    in property <string> label-font-family: Theme.active.font_body;
+    in property <bool> label-elide: false;
     in property <length> button-width: 80px;
     in property <length> button-height: 28px;
     private property <bool> shift-armed: false;
@@ -121,10 +117,11 @@ export component RDSSelectButton {
         height: parent.height;
         x: (parent.width - self.width) / 2;
         y: (parent.height - self.height) / 2;
+        clip: true;
         border-radius: Theme.active.radius_large;
         border-color: @linear-gradient(180deg, #242424 0%, #161616 100%);
         border-width: 1px;
-        drop-shadow-blur: root.active ? 8px : 8px;
+        drop-shadow-blur: 8px;
         drop-shadow-offset-y: root.active ? 2px : 6px;
         drop-shadow-color: #000;
 
@@ -141,9 +138,14 @@ export component RDSSelectButton {
         Text {
             text: root.label;
             color: Theme.active.text_primary;
+            font-family: root.label-font-family;
             font-size: Theme.active.font_small;
             horizontal-alignment: center;
             vertical-alignment: center;
+            width: parent.width - 8px;
+            height: parent.height;
+            x: 4px;
+            overflow: root.label-elide ? elide : clip;
         }
 
         TouchArea {
@@ -177,23 +179,48 @@ Description: A compact grid cell suitable for step sequencers.
 Public members:
 - active: bool - Active state of the cell
 - current: bool - Whether the cell is currently being played
+- cell-width: length - Cell width
+- cell-height: length - Cell height
+- cell-text: string - Optional text label inside the cell
+- cell-text-color: color - Text color
+- cell-text-size: length - Text size
+- cell-text-weight: int - Text weight
 - clicked(): callback - Triggered when the cell is clicked
 */
 export component RDSSequencerCell {
     in property <bool> active;
     in property <bool> current;
+    in property <bool> edit: false;
+    in property <length> cell-width: 20px;
+    in property <length> cell-height: 20px;
+    in property <string> cell-text: "";
+    in property <color> cell-text-color: Theme.active.text_primary;
+    in property <length> cell-text-size: 10px;
+    in property <int> cell-text-weight: 500;
     callback clicked();
 
-    width: 20px;
-    height: 20px;
+    width: root.cell-width;
+    height: root.cell-height;
 
     Rectangle {
         width: parent.width;
         height: parent.height;
         background: root.current ? Theme.active.text_primary : (root.active ? Theme.active.accent_primary : Theme.active.border_subtle);
         border-radius: Theme.active.radius_small;
-        border-color: Theme.active.border_strong;
-        border-width: 1px;
+        border-color: root.edit ? #e06e26 : Theme.active.border_strong;
+        border-width: root.edit ? 2px : 1px;
+
+        Text {
+            visible: root.cell-text != "";
+            text: root.cell-text;
+            color: root.cell-text-color;
+            font-size: root.cell-text-size;
+            font-weight: root.cell-text-weight;
+            horizontal-alignment: center;
+            vertical-alignment: center;
+            width: parent.width;
+            height: parent.height;
+        }
 
         TouchArea {
             width: parent.width;

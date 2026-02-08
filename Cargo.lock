@@ -3644,7 +3644,7 @@ dependencies = [
 
 [[package]]
 name = "rds-slint-ui-kit"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "slint",
  "slint-build",
@@ -3652,7 +3652,7 @@ dependencies = [
 
 [[package]]
 name = "rds-wasm-demo"
-version = "0.1.12"
+version = "0.1.13"
 dependencies = [
  "console_error_panic_hook",
  "slint",
