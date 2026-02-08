@@ -1,0 +1,11 @@
+[target.x86_64-pc-windows-msvc]
+rustflags = ["-C", "link-arg=/STACK:67108864"]
+
+[host]
+rustflags = ["-C", "link-arg=/STACK:67108864"]
+
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "link-arg=-zstack-size=67108864"]
+
+[build]
+target-dir = "target/build"

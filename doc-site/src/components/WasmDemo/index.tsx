@@ -23,15 +23,24 @@ function SlintDemoInner() {
 
                 // Initialize the wasm module only once
                 if (!globalInitialized) {
+                    if (canvasRef.current) {
+                        // Ensure canvas internal size matches CSS size for Slint scaling
+                        canvasRef.current.width = canvasRef.current.offsetWidth;
+                        canvasRef.current.height = canvasRef.current.offsetHeight;
+                    }
+                    
                     await init.default();
                     globalInitialized = true;
+                    // Since the Rust main() is marked with #[wasm_bindgen(start)],
+                    // it is automatically called by init.default().
+                    // We don't need to call it again here.
+                    return;
                 }
 
                 if (!isMounted) return;
 
-                // Start the slint application
-                // Note: The function name matches the crate name in snake_case
-                // We use a small timeout to ensure the DOM is ready for Slint to find the canvas
+                // Start the slint application if not already started by the hook
+                // or if we are re-mounting.
                 timeoutId = setTimeout(() => {
                     if (isMounted && canvasRef.current) {
                         // Ensure canvas internal size matches CSS size for Slint scaling
@@ -39,6 +48,8 @@ function SlintDemoInner() {
                         canvasRef.current.height = canvasRef.current.offsetHeight;
 
                         try {
+                            // Only call main if we're not the first initialization
+                            // because the first initialization already called it via #[wasm_bindgen(start)]
                             init.main();
                         } catch (e) {
                             console.warn('Slint main execution:', e);
@@ -63,6 +74,7 @@ function SlintDemoInner() {
     return (
         <div className={styles.demoContainer} key={instanceKey.current}>
             <canvas
+                id="canvas"
                 ref={canvasRef}
                 className={styles.demoCanvas}
             />

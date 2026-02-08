@@ -18,12 +18,13 @@ const config: Config = {
   url: 'https://resonance-designs.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/rd-slint-ui-kit/',
+  trailingSlash: false,
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
   organizationName: 'resonance-designs', // Usually your GitHub org/user name.
-  projectName: 'rds-slint-ui-kit', // Usually your repo name.
+  projectName: 'rd-slint-ui-kit', // Usually your repo name.
 
   onBrokenLinks: 'throw',
 
@@ -44,7 +45,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/resonance-designs/rds-slint-ui-kit/tree/master/doc-site/',
+            'https://github.com/resonance-designs/rd-slint-ui-kit/tree/master/doc-site/',
         },
         blog: {
           showReadingTime: true,
@@ -55,7 +56,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/resonance-designs/rds-slint-ui-kit/tree/master/doc-site/',
+            'https://github.com/resonance-designs/rd-slint-ui-kit/tree/master/doc-site/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
@@ -78,7 +79,7 @@ const config: Config = {
     navbar: {
       title: 'RD Slint UI Kit',
       logo: {
-        alt: 'rds-slint-ui-kit Logo',
+        alt: 'rd-slint-ui-kit Logo',
         src: 'img/RD_Logo.svg',
       },
       items: [
@@ -90,7 +91,7 @@ const config: Config = {
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
-          href: 'https://github.com/resonance-designs/rds-slint-ui-kit',
+          href: 'https://github.com/resonance-designs/rd-slint-ui-kit',
           label: 'GitHub',
           position: 'right',
         },
@@ -130,7 +131,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/resonance-designs/rds-slint-ui-kit',
+              href: 'https://github.com/resonance-designs/rd-slint-ui-kit',
             },
           ],
         },

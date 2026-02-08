@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.14] - 2026-02-08
+
+- Increased stack size for builds.
+- Setup GitHub Actions for doc-site automatic deployment to GitHub Pages.
+- Fixed typos in GitHub project name and URL.
+- **Enhanced `RDSNumericKeypad`**: Simplified it to avoid stackoverflow issues.
+- **Enhanced `RDSKeybed`**: 
+  - Added "scale masking" (`scale-mask`) prop to highlight/dim various keys of the keybed.
+  - Added "scaled dividing" (`scale_divisor`) prop to handle setting scales to the keybed.
+- Updated WASM Live Demo of the components
+- Created production build scripts (`/scripts/deploy.bat` & `/scripts/deploy.js`) to build the WASM Live Demo, build Docusaurus, then copy the WASM build artifacts to the static Docusaurus build directory.
+
 ## [0.1.13] - 2026-02-07
 
 - **New `all_components.slint`**: Created a component in the root of the project that contains all components organized into categories.
