@@ -1,6 +1,6 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.12-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.13-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
@@ -27,8 +27,7 @@ A standard button component with customizable labeling and styling.
 - `background: color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.background_main`)
 - `border-color: color` (Default: `root.active ? Theme.active.accent_primary : Theme.active.border_strong`)
 - `border-radius: length` (Default: `Theme.active.radius_medium`)
-- `layout-stretch: int` (Default: `0`)
-- `layout-preferred-width: length`
+- `label-padding-top/right/bottom/left: length` (Default: `4px`)
 
 **[Callbacks]**
 
@@ -55,6 +54,8 @@ A larger selectable button with active state and shift-click support.
 
 - `label: string`
 - `active: bool`
+- `label-font-family: string`
+- `label-elide: bool`
 - `button-width: length` (Default: `80px`)
 - `button-height: length` (Default: `28px`)
 
@@ -84,6 +85,13 @@ A compact grid cell suitable for step sequencers.
 
 - `active: bool`
 - `current: bool`
+- `edit: bool`
+- `cell-width: length` (Default: `20px`)
+- `cell-height: length` (Default: `20px`)
+- `cell-text: string`
+- `cell-text-color: color`
+- `cell-text-size: length`
+- `cell-text-weight: int`
 
 **[Callbacks]**
 
@@ -123,11 +131,18 @@ RDSVUMeter {
 
 ### `RDSCircleToggle`
 
-A minimal circular toggle indicator.
+A minimal circular toggle indicator with optional labeling.
 
 **[Properties]**
 
 - `active: bool`
+- `label: string`
+- `label-active: string`
+- `label-color: color`
+- `label-active-color: color`
+- `label-font-size: length`
+- `label-font-weight: int`
+- `label-pos: string` (Default: "right")
 
 **[Callbacks]**
 
@@ -190,6 +205,7 @@ A rotary knob supporting bounded and infinite rotation modes.
 - `indicator-position: length`
 - `sensitivity: float`
 - `scroll-sensitivity: float`
+- `enabled: bool` (Default: `true`)
 - `renderer: string` ("hi-fi", "lo-fi")
 - `indicator: string` ("circle", "line", "caret")
 - `indicator-color: color`
@@ -245,6 +261,8 @@ A versatile slider (fader) supporting vertical and horizontal orientations.
 - `size: string` ("small", "medium", "large")
 - `orientation: string` ("vertical", "horizontal")
 - `height-override: length`
+- `drag-sensitivity: float`
+- `scroll-sensitivity: float`
 
 **[Callbacks]**
 
@@ -264,7 +282,39 @@ RDSSlider {
 
 ---
 
-### `RDSHeaderLabel`
+### `RDSSimpSlider`
+
+A simple bar slider for step-style controls or compact parameter adjustment.
+
+**[Properties]**
+
+- `value: float` (Default: `0.0`)
+- `min-value: float` (Default: `0.0`)
+- `max-value: float` (Default: `1.0`)
+- `orientation: string` (Default: `"vertical"`)
+- `slider-width: length` (Default: `12px`)
+- `slider-height: length` (Default: `120px`)
+- `background-color: color`
+- `fill-color: color`
+- `border-clr: color`
+- `border-size: length`
+- `radius: length`
+
+**[Callbacks]**
+
+- `value-changed(float)`
+
+**[Example]**
+
+```slint
+RDSSimpSlider {
+    value: 0.5;
+    min-value: 0.0;
+    max-value: 1.0;
+}
+```
+
+---
 
 A styled header label with background, padding, and a right-side slot for child components.
 
@@ -278,6 +328,8 @@ A styled header label with background, padding, and a right-side slot for child 
 - `right-padding: length` (Default: `8px`)
 - `right-gap: length` (Default: `6px`)
 - `bg-color: color`
+- `txt-color: color`
+- `letter-spacing: length`
 - `border-r-tl: length`
 - `border-r-tr: length`
 - `border-r-bl: length`
@@ -307,6 +359,16 @@ A custom dropdown selector with a styled trigger and popup list.
 - `enabled: bool` (Default: `true`)
 - `item-height: length` (Default: `28px`)
 - `max-visible-items: int` (Default: `6`)
+- `background: color`
+- `border-color: color`
+- `border-width: length`
+- `border-radius: length`
+- `text-color: color`
+- `font-size: length`
+- `font-family: string`
+- `padding-horizontal: length`
+- `padding-vertical: length`
+- `popup-background: color`
 
 **[Callbacks]**
 
@@ -348,6 +410,9 @@ A numeric selector with increment/decrement buttons and an interactive readout. 
 - `button-tog: bool` (Default: `true`)
 - `allow-editing: bool` (Default: `true`)
 - `button-pos: string` ("top-bottom", "left-right")
+- `button-y-offset: length` (Default: `0px`)
+- `button-width: length` (Default: `24px`)
+- `button-height: length` (Default: `24px`)
 
 **[Callbacks]**
 
@@ -362,6 +427,43 @@ RDSNumStepper {
     min-value: 20;
     max-value: 20000;
     button-pos: "left-right";
+}
+```
+
+---
+
+### `RDSTextStepper`
+
+A stepper component for cycling through a list of string options.
+
+**[Properties]**
+
+- `options: [string]` - List of strings to cycle through
+- `index: int` - Currently selected index
+- `font-family: string`
+- `readout-background: color`
+- `readout-border-color: color`
+- `readout-border-width: length`
+- `readout-border-radius: length`
+- `readout-width: length`
+- `readout-height: length`
+- `readout-text-color: color`
+- `readout-text-size: length`
+- `readout-text-weight: int`
+- `button-tog: bool` (Default: `true`)
+- `button-pos: string` ("left-right", "top-bottom")
+
+**[Callbacks]**
+
+- `index-changed(int)`
+
+**[Example]**
+
+```slint
+RDSTextStepper {
+    options: ["Low", "Medium", "High"];
+    index: 1;
+    index-changed(i) => { debug("New index: ", i); }
 }
 ```
 
@@ -413,6 +515,7 @@ A numeric keypad for entering values, with committed and cleared callbacks.
 - `pad-digits: int`
 - `allow-negative: bool`
 - `num-only: bool`
+- `parsed-value: float`
 
 **[Callbacks]**
 
@@ -460,20 +563,25 @@ RDSKeybed {
 
 ### `RDSWaveformViz`
 
-Visualizes a static waveform with an optional playhead.
+Visualizes a static waveform with an optional playhead, loop regions, and grain markers.
 
 **[Properties]**
 
 - `waveform: [float]` (Amplitude values 0.0 – 1.0)
-- `waveform_time_labels: [string]` (Time markers for X-axis)
-- `playhead-index: int` (Current position in waveform array)
+- `waveform-time-labels: [string]` (Time markers for X-axis)
+- `playhead-index: int`
+- `loop-enabled: bool`
+- `loop-start: float` (0.0 - 1.0)
+- `loop-length: float` (0.0 - 1.0)
+- `trigger-start: float` (0.0 - 1.0)
+- `grain-markers: [float]` (Array of positions 0.0 - 1.0)
 
 **[Example]**
 
 ```slint
 RDSWaveformViz {
     waveform: [0.1, 0.5, 0.8, 0.4, 0.2];
-    waveform_time_labels: ["0s", "1s", "2s", "3s", "4s"];
+    waveform-time-labels: ["0s", "1s", "2s", "3s", "4s"];
     playhead-index: 2;
 }
 ```
@@ -522,15 +630,15 @@ Visualizes phase relationship between two signals (L/R).
 
 **[Properties]**
 
-- `vectorscope_x: [float]` (Left channel signal samples)
-- `vectorscope_y: [float]` (Right channel signal samples)
+- `vectorscope-x: [float]` (Left channel signal samples)
+- `vectorscope-y: [float]` (Right channel signal samples)
 
 **[Example]**
 
 ```slint
 RDSVectorscopeViz {
-    vectorscope_x: [0.1, 0.2, -0.1];
-    vectorscope_y: [0.2, -0.1, 0.3];
+    vectorscope-x: [0.1, 0.2, -0.1];
+    vectorscope-y: [0.2, -0.1, 0.3];
 }
 ```
 
@@ -619,19 +727,22 @@ A comprehensive documentation site built with Docusaurus is available in the `do
 ### Running the Documentation Site Locally
 
 1. **Install dependencies**:
+
    ```bash
    cd doc-site
    npm install
    ```
 
 2. **Start the server**:
+
    ```bash
    npm start
    ```
 
 The documentation includes a **Live Wasm Demo** where you can interact with the components directly in your browser.
 
-### Key Features of the Demo:
+### Key Features of the Demo
+
 - **Component Showcase**: Explore all visualizers (Oscilloscope, Spectrum, Vectorscope) and controls.
 - **Real-time Theme Switching**: Toggle between Light and Dark modes instantly.
 - **Responsive Interaction**: Experience Slint's performance on the web.
@@ -668,6 +779,63 @@ This library is intended to be distributed via:
 - [x] Demo application using the UI library
 - [x] Documentation site & screenshots
 - [ ] Additional UI components (Tabs, Menus, specialized visualizers)
+
+## Developer Onboarding
+
+Welcome to the development team of `rds-slint-ui-kit`! This section will help you get your environment set up and understand the development workflow.
+
+### Prerequisites
+
+To contribute to this project, you will need:
+
+- **Rust** (Latest stable version)
+- **Slint** (Included as a Cargo dependency, but the Slint extension for your IDE is highly recommended)
+- **Node.js** (For documentation site and version management)
+- **wasm-pack** (For building the WebAssembly demo)
+
+### Project Structure
+
+- **`components/`**: Core Slint component definitions (`.slint` files).
+- **`theme/`**: Centralized theme management and assets (SVG, fonts).
+- **`src/`**: Rust library wrapper for the Slint components.
+- **`wasm-demo/`**: A standalone Slint project that compiles to WASM for showcasing the toolkit.
+- **`doc-site/`**: Docusaurus-based documentation site.
+- **`scripts/`**: Utility scripts for maintenance (e.g., versioning).
+
+### Local Development Workflow
+
+#### 1. Validating Component Changes
+After modifying any `.slint` files in the `components/` directory, verify that they compile correctly using Cargo:
+
+```bash
+cargo check
+```
+
+#### 2. Running the WASM Demo
+The WASM demo is the primary way to test components in an interactive environment:
+
+```bash
+cd wasm-demo
+wasm-pack build --target web
+# Then serve the wasm-demo directory with a static server
+npx serve .
+```
+
+#### 3. Working on Documentation
+The documentation site is built with Docusaurus and supports live MDX previews:
+
+```bash
+cd doc-site
+npm install
+npm start
+```
+
+#### 4. Version Management
+We use a custom script to synchronize versions across `package.json`, `Cargo.toml`, and documentation:
+
+```bash
+npm run version
+```
 
 ## License
 

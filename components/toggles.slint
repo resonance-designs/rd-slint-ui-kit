@@ -5,27 +5,109 @@ Component: RDSCircleToggle
 Description: A minimal circular toggle indicator.
 Public members:
 - active: bool - Current toggle state
+- active-color: color - Background color when active (default: accent_primary)
+- active-hover: color - Background color on hover when active (default: accent_highlight)
+- active-pressed: color - Background color on press when active (default: accent_secondary)
 - clicked(): callback - Triggered when the toggle is clicked
 */
 
 export component RDSCircleToggle {
     in property <bool> active;
+    in property <color> active-color: Theme.active.accent_primary;
+    in property <color> active-hover: Theme.active.accent_highlight;
+    in property <color> active-pressed: Theme.active.accent_secondary;
+    in property <string> label: "";
+    in property <string> label-active: "";
+    in property <color> label-color: Theme.active.text_secondary;
+    in property <color> label-active-color: root.label-color;
+    in property <length> label-font-size: Theme.active.font_small;
+    in property <int> label-font-weight: 400;
+    in property <string> label-pos: "right";
     callback clicked();
 
-    width: 14px;
-    height: 14px;
+    private property <string> label-text: root.active
+        ? (root.label-active == "" ? root.label : root.label-active)
+        : root.label;
+    private property <bool> has-label: root.label-text != "";
+    private property <bool> label-right: root.label-pos == "right";
+    private property <bool> label-left: root.label-pos == "left";
+    private property <bool> label-top: root.label-pos == "top" || root.label-pos == "top-center";
+    private property <bool> label-bottom: root.label-pos == "bottom" || root.label-pos == "bottom-center";
+    private property <bool> layout-horizontal: root.label-left || root.label-right;
+    private property <bool> layout-vertical: root.label-top || root.label-bottom;
+    private property <bool> use-default-right: root.has-label && !root.layout-horizontal && !root.layout-vertical;
+    private property <length> label-gap: 6px;
+    private property <length> circle-size: 14px;
+    private property <length> label-block-height: root.label-font-size + 4px;
+    private property <length> label-block-width: label_metrics.preferred-width;
+
+    width: !root.has-label
+        ? root.circle-size
+        : (root.layout-horizontal || root.use-default-right
+            ? (root.circle-size + root.label-gap + root.label-block-width)
+            : Math.max(root.circle-size, root.label-block-width));
+    height: !root.has-label
+        ? root.circle-size
+        : (root.layout-vertical
+            ? (root.circle-size + root.label-gap + root.label-block-height)
+            : Math.max(root.circle-size, root.label-block-height));
 
     Rectangle {
         width: parent.width;
         height: parent.height;
-        background: root.active
-            ? (ta.pressed ? Theme.active.accent_secondary : (ta.has-hover ? Theme.active.accent_highlight : Theme.active.accent_primary))
-            : (ta.pressed ? Theme.active.border_strong : Theme.active.border_subtle);
-        border-radius: 999px;
-        border-color: root.active
-            ? (ta.pressed ? Theme.active.accent_primary : Theme.active.accent_highlight)
-            : (ta.has-hover ? Theme.active.border_subtle : Theme.active.border_strong);
-        border-width: 1px;
+        background: transparent;
+
+        label_metrics := Text {
+            text: root.label-text;
+            font-size: root.label-font-size;
+            font-weight: root.label-font-weight;
+            visible: false;
+        }
+
+        Text {
+            visible: root.has-label;
+            text: root.label-text;
+            color: root.active ? root.label-active-color : root.label-color;
+            font-size: root.label-font-size;
+            font-weight: root.label-font-weight;
+            width: root.label-block-width;
+            height: root.label-block-height;
+            x: root.label-left
+                ? 0px
+                : ((root.label-right || root.use-default-right)
+                    ? (parent.width - root.label-block-width)
+                    : ((parent.width - root.label-block-width) / 2));
+            y: root.label-top
+                ? 0px
+                : (root.label-bottom
+                    ? (parent.height - root.label-block-height)
+                    : ((parent.height - root.label-block-height) / 2));
+            horizontal-alignment: center;
+            vertical-alignment: center;
+        }
+
+        Rectangle {
+            width: root.circle-size;
+            height: root.circle-size;
+            x: root.label-left
+                ? (root.label-block-width + root.label-gap)
+                : ((root.label-right || root.use-default-right)
+                    ? 0px
+                    : ((parent.width - root.circle-size) / 2));
+            y: root.label-top
+                ? (root.label-block-height + root.label-gap)
+                : (root.label-bottom
+                    ? 0px
+                    : ((parent.height - root.circle-size) / 2));
+            background: root.active
+                ? (ta.pressed ? root.active-pressed : (ta.has-hover ? root.active-hover : root.active-color))
+                : (ta.pressed ? Theme.active.border_strong : Theme.active.border_subtle);
+            border-radius: 999px;
+            border-color: root.active
+                ? (ta.pressed ? Theme.active.accent_primary : root.active-hover)
+                : (ta.has-hover ? Theme.active.border_subtle : Theme.active.border_strong);
+            border-width: 1px;
+        }
 
         ta := TouchArea {
             width: parent.width;

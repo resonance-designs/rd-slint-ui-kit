@@ -1,0 +1,74 @@
+# Developer Onboarding
+
+Welcome to the `rds-slint-ui-kit` development team! This guide will help you set up your development environment and understand the contribution workflow.
+
+## Prerequisites
+
+Ensure you have the following tools installed:
+
+- **Rust**: [Install Rust](https://www.rust-lang.org/tools/install) (latest stable version).
+- **Node.js**: [Install Node.js](https://nodejs.org/) (for documentation and scripts).
+- **wasm-pack**: `cargo install wasm-pack` (for the demo application).
+- **IDE Support**: We recommend using [VS Code](https://code.visualstudio.com/) with the **Slint** and **rust-analyzer** extensions.
+
+## Repository Structure
+
+The repository is organized into several key areas:
+
+- **`components/`**: Contains the source code for all Slint UI components.
+- **`theme/`**: Centralized theme definitions, including color palettes and shared assets.
+- **`src/`**: The Rust library that provides the programmatic interface to the components.
+- **`wasm-demo/`**: A interactive showcase project used for testing and demonstration.
+- **`doc-site/`**: The Docusaurus source for this documentation.
+
+## Development Workflow
+
+### 1. Making Changes to Components
+
+When adding a new component or modifying an existing one:
+
+1.  Place or edit the `.slint` file in the `components/` directory.
+2.  If it's a new component, export it in `components/index.slint`.
+3.  Verify your changes by running `cargo check` in the project root. This triggers the Slint compiler and ensures there are no syntax or logic errors.
+
+### 2. Testing with the WASM Demo
+
+The `wasm-demo` is the best way to verify component behavior in a real-world scenario:
+
+```bash
+cd wasm-demo
+wasm-pack build --target web
+npx serve .
+```
+
+Navigate to the provided local URL to interact with your changes.
+
+### 3. Updating Documentation
+
+If you modify component properties or add new features, please update the documentation:
+
+1.  Edit the corresponding MDX file in `doc-site/docs/components/`.
+2.  For new components, create a new MDX file following the existing templates.
+3.  Preview your changes:
+
+```bash
+cd doc-site
+npm install
+npm start
+```
+
+### 4. Versioning
+
+Before submitting a pull request that includes a version bump, run:
+
+```bash
+npm run version
+```
+
+This ensures the version number is synchronized across `package.json`, `Cargo.toml`, and the documentation site.
+
+## Contribution Guidelines
+
+- Follow existing naming conventions (kebab-case for Slint properties).
+- Ensure all public properties and callbacks are documented in the component's doc comments and MDX files.
+- Run `cargo check` before committing to catch compilation errors early.

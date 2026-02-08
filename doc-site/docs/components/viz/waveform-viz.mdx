@@ -1,0 +1,26 @@
+# RDSWaveformViz
+
+Visualizes a static waveform with an optional playhead, loop regions, and grain markers.
+
+## Properties
+
+- **waveform**: `[float]` (Amplitude values 0.0 – 1.0)
+- **waveform-time-labels**: `[string]` (Time markers for X-axis)
+- **playhead-index**: `int`
+- **loop-enabled**: `bool`
+- **loop-start**: `float` (0.0 - 1.0)
+- **loop-length**: `float` (0.0 - 1.0)
+- **trigger-start**: `float` (0.0 - 1.0)
+- **grain-markers**: `[float]` (Array of positions 0.0 - 1.0)
+
+## Example
+
+```slint
+import { RDSWaveformViz } from "rds-slint-ui-kit/components/index.slint";
+
+RDSWaveformViz {
+    waveform: [0.1, 0.5, 0.8, 0.4, 0.2];
+    waveform-time-labels: ["0s", "1s", "2s", "3s", "4s"];
+    playhead-pos: 0.5;
+}
+```

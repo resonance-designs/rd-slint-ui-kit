@@ -17,14 +17,19 @@ if (!newVersion) {
 }
 const rootDir = process.cwd();
 
+const replaceJsonVersion = (content, version) =>
+    content.replace(/"version":\s*"[^"]+"/, `"version": "${version}"`);
+const replaceTomlVersion = (content, version) =>
+    content.replace(/^version\s*=\s*"[^"]+"/m, `version = "${version}"`);
+
 const filesToUpdate = [
     {
         path: 'package.json',
-        replace: (content, version) => content.replace(/"version":\s*"[^"]+"/, `"version": "${version}"`)
+        replace: replaceJsonVersion
     },
     {
         path: 'Cargo.toml',
-        replace: (content, version) => content.replace(/^version\s*=\s*"[^"]+"/m, `version = "${version}"`)
+        replace: replaceTomlVersion
     },
     {
         path: 'README.md',
@@ -36,11 +41,11 @@ const filesToUpdate = [
     },
     {
         path: 'doc-site/package.json',
-        replace: (content, version) => content.replace(/"version":\s*"[^"]+"/, `"version": "${version}"`)
+        replace: replaceJsonVersion
     },
     {
         path: 'wasm-demo/Cargo.toml',
-        replace: (content, version) => content.replace(/^version\s*=\s*"[^"]+"/m, `version = "${version}"`)
+        replace: replaceTomlVersion
     }
 ];
 

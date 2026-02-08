@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.1.13] - 2026-02-07
+
+- **New `all_components.slint`**: Created a component in the root of the project that contains all components organized into categories.
+- **Enhanced `RDSButton`**: Refined layout logic and removed redundant stretch properties in favor of standard Slint layout behavior. Added `pressed` and `released` callbacks.
+- **Enhanced `RDSSelectButton`**: Added `label-font-family` and `label-elide` properties for better text control.
+- **Enhanced `RDSSequencerCell`**: Added customizable dimensions (`cell-width`, `cell-height`), text labeling (`cell-text`), and an `edit` state.
+- **New Component `RDSTextStepper`**: A stepper component for cycling through string options.
+- **Enhanced `RDSWaveformViz`**: Added support for loop regions, trigger points, and grain markers. Renamed properties to kebab-case for consistency.
+- **Enhanced `RDSVectorscopeViz`**: Renamed properties to kebab-case.
+- **Theming Updates**:
+  - Added `ui_device_panel_bg` to `RDSTheme`.
+  - Added `is-dark` property to the `Theme` global for easier conditional styling.
+- **Documentation**:
+  - Updated all component MDX files and root README to reflect the latest property changes and new components.
+  - Moved component documentation into category sub-folders and adjusted the navigation to mirror it.
+  - Updated the HomepageFeatures component with custom graphics.
+  - Updated Web Assembly compoonent gallery/demo.
+
 ## [0.1.12] - 2026-01-26
 
 - **Documentation & Wasm Integration**:

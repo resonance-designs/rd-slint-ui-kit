@@ -44,6 +44,8 @@ component KeybedKey inherits Rectangle {
     width: root.key-width;
     height: root.key-height;
     border-radius: root.is-black ? 2px : 3px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
     border-color: Theme.active.border_strong;
     border-width: 1px;
     background: root.is-black ? Theme.active.background_raised : Theme.active.background_main;
@@ -53,8 +55,8 @@ component KeybedKey inherits Rectangle {
             ? true
             : root.scale == "major"
                 ? (root.semitone == 0 || root.semitone == 2 || root.semitone == 4 ||
-                   root.semitone == 5 || root.semitone == 7 || root.semitone == 9 ||
-                   root.semitone == 11)
+                    root.semitone == 5 || root.semitone == 7 || root.semitone == 9 ||
+                    root.semitone == 11)
             : root.scale == "minor"
                 ? (root.semitone == 0 || root.semitone == 2 || root.semitone == 3 ||
                     root.semitone == 5 || root.semitone == 7 || root.semitone == 8 ||
@@ -180,14 +182,11 @@ export component RDSNumericKeypad {
         root.committed(root.parsed-input);
     }
 
-    width: 200px;
-    height: 280px;
-
     private property <string> input-display:
         root.input-has-value
             ? (root.input-negative ? "-" : "") +
-              root.input-int +
-              (root.input-decimal-active ? "." + root.input-decimal : "")
+                root.input-int +
+                (root.input-decimal-active ? "." + root.input-decimal : "")
             : "-";
     private property <float> parsed-input:
         root.input-has-value
@@ -195,6 +194,7 @@ export component RDSNumericKeypad {
                 (root.input-int + (root.input-decimal-active ? root.input-decimal * 0.1 : 0.0))
             : root.current-value;
 
+    width: 248px;
 
     FocusScope {
         width: parent.width;
@@ -260,137 +260,139 @@ export component RDSNumericKeypad {
             reject
         }
 
-        readout := VerticalLayout {
-            spacing: 4px;
+        HorizontalLayout {
+            spacing: 8px;
             width: parent.width;
-            height: 96px;
-            Text { text: "Current"; color: Theme.active.text_secondary; font-size: 10px; }
-            StepperReadout {
-                value: root.current-value;
-                min-value: -9999.0;
-                max-value: 9999.0;
-                pad-digits: root.pad-digits;
-                editing: false;
-            }
-            Text { text: "New"; color: Theme.active.text_secondary; font-size: 10px; }
-            Rectangle {
-                width: 80px;
-                height: 32px;
-                border-radius: Theme.active.radius_small;
-                border-color: Theme.active.border_strong;
-                border-width: 1px;
-                background: Theme.active.background_main;
-                Text {
-                    text: root.input-display;
-                    color: Theme.active.text_primary;
-                    font-family: Theme.active.font_readout;
-                    font-size: Theme.active.font_medium;
-                    horizontal-alignment: center;
-                    vertical-alignment: center;
-                }
-            }
-        }
+            height: parent.height;
 
-        keypad := VerticalLayout {
-            spacing: 6px;
-            width: parent.width;
-            height: parent.height - readout.height - 8px;
+            keypad := VerticalLayout {
+                spacing: 6px;
+                width: 144px;
 
-            HorizontalLayout {
-                spacing: 6px;
-                KeypadButton {
-                    label: "7"; clicked => {
-                        root.handle-digit(7);
+                HorizontalLayout {
+                    spacing: 6px;
+                    KeypadButton {
+                        label: "7"; clicked => {
+                            root.handle-digit(7);
+                        }
+                    }
+                    KeypadButton {
+                        label: "8"; clicked => {
+                            root.handle-digit(8);
+                        }
+                    }
+                    KeypadButton {
+                        label: "9"; clicked => {
+                            root.handle-digit(9);
+                        }
                     }
                 }
-                KeypadButton {
-                    label: "8"; clicked => {
-                        root.handle-digit(8);
+                HorizontalLayout {
+                    spacing: 6px;
+                    KeypadButton {
+                        label: "4"; clicked => {
+                            root.handle-digit(4);
+                        }
+                    }
+                    KeypadButton {
+                        label: "5"; clicked => {
+                            root.handle-digit(5);
+                        }
+                    }
+                    KeypadButton {
+                        label: "6"; clicked => {
+                            root.handle-digit(6);
+                        }
                     }
                 }
-                KeypadButton {
-                    label: "9"; clicked => {
-                        root.handle-digit(9);
+                HorizontalLayout {
+                    spacing: 6px;
+                    KeypadButton {
+                        label: "1"; clicked => {
+                            root.handle-digit(1);
+                        }
+                    }
+                    KeypadButton {
+                        label: "2"; clicked => {
+                            root.handle-digit(2);
+                        }
+                    }
+                    KeypadButton {
+                        label: "3"; clicked => {
+                            root.handle-digit(3);
+                        }
+                    }
+                }
+                HorizontalLayout {
+                    spacing: 6px;
+                    KeypadButton {
+                        label: "-";
+                        visible: !root.num-only && root.allow-negative;
+                        clicked => {
+                            root.handle-negative();
+                        }
+                    }
+                    KeypadButton {
+                        label: "0"; clicked => {
+                            root.handle-digit(0);
+                        }
+                    }
+                    KeypadButton {
+                        label: ".";
+                        visible: !root.num-only;
+                        clicked => {
+                            root.handle-decimal();
+                        }
+                    }
+                }
+                HorizontalLayout {
+                    spacing: 6px;
+                    KeypadButton {
+                        label: "Del";
+                        clicked => {
+                            root.handle-delete();
+                        }
+                    }
+                    KeypadButton {
+                        label: "Clr";
+                        clicked => {
+                            root.handle-clear();
+                        }
+                    }
+                    KeypadButton {
+                        label: "OK";
+                        clicked => { root.handle-ok(); }
                     }
                 }
             }
-            HorizontalLayout {
-                spacing: 6px;
-                KeypadButton {
-                    label: "4"; clicked => {
-                        root.handle-digit(4);
-                    }
+
+            readout := VerticalLayout {
+                spacing: 4px;
+                height: 120px;
+                Text { text: "Current"; horizontal-alignment: center; color: Theme.active.text_secondary; font-size: 10px; }
+                StepperReadout {
+                    value: root.current-value;
+                    min-value: -9999.0;
+                    max-value: 9999.0;
+                    pad-digits: root.pad-digits;
+                    editing: false;
                 }
-                KeypadButton {
-                    label: "5"; clicked => {
-                        root.handle-digit(5);
+                Text { text: "New"; horizontal-alignment: center; color: Theme.active.text_secondary; font-size: 10px; }
+                Rectangle {
+                    width: 80px;
+                    height: 32px;
+                    border-radius: Theme.active.radius_small;
+                    border-color: Theme.active.border_strong;
+                    border-width: 1px;
+                    background: Theme.active.background_main;
+                    Text {
+                        text: root.input-display;
+                        color: Theme.active.text_primary;
+                        font-family: Theme.active.font_readout;
+                        font-size: Theme.active.font_medium;
+                        horizontal-alignment: center;
+                        vertical-alignment: center;
                     }
-                }
-                KeypadButton {
-                    label: "6"; clicked => {
-                        root.handle-digit(6);
-                    }
-                }
-            }
-            HorizontalLayout {
-                spacing: 6px;
-                KeypadButton {
-                    label: "1"; clicked => {
-                        root.handle-digit(1);
-                    }
-                }
-                KeypadButton {
-                    label: "2"; clicked => {
-                        root.handle-digit(2);
-                    }
-                }
-                KeypadButton {
-                    label: "3"; clicked => {
-                        root.handle-digit(3);
-                    }
-                }
-            }
-            HorizontalLayout {
-                spacing: 6px;
-                Rectangle { width: 44px; height: 36px; opacity: 0; }
-                KeypadButton {
-                    label: "0"; clicked => {
-                        root.handle-digit(0);
-                    }
-                }
-                Rectangle { width: 44px; height: 36px; opacity: 0; }
-            }
-            HorizontalLayout {
-                spacing: 6px;
-                KeypadButton {
-                    label: "Del";
-                    clicked => {
-                        root.handle-delete();
-                    }
-                }
-                KeypadButton {
-                    label: "Clr";
-                    clicked => {
-                        root.handle-clear();
-                    }
-                }
-                KeypadButton {
-                    label: ".";
-                    visible: !root.num-only;
-                    clicked => {
-                        root.handle-decimal();
-                    }
-                }
-                KeypadButton {
-                    label: "-";
-                    visible: root.allow-negative;
-                    clicked => {
-                        root.handle-negative();
-                    }
-                }
-                KeypadButton {
-                    label: "OK";
-                    clicked => { root.handle-ok(); }
                 }
             }
         }
@@ -543,12 +545,12 @@ export component RDSKeybed {
                         i == 5 ? 9 : 11;
                     note:
                         root.base-note + o * 12 +
-                        (i == 0 ? 0 :
-                         i == 1 ? 2 :
-                         i == 2 ? 4 :
-                         i == 3 ? 5 :
-                         i == 4 ? 7 :
-                         i == 5 ? 9 : 11);
+                            (i == 0 ? 0 :
+                            i == 1 ? 2 :
+                            i == 2 ? 4 :
+                            i == 3 ? 5 :
+                            i == 4 ? 7 :
+                            i == 5 ? 9 : 11);
                     triggered(note) => { root.note-triggered(note); }
                 }
             }

@@ -71,18 +71,19 @@ export component RDSKnob inherits Rectangle {
     in-out property <length> label-font-size: 11px;
     in-out property <int> label-font-weight: 400;
     in-out property <string> label-pos: "bottom-center";
-    in-out property <bool> readout-enabled: true;
-    in-out property <string> readout-text: "";
-    in-out property <string> readout-mode: "raw";
-    in-out property <string> readout-suffix: "";
-    in-out property <[string]> readout-literals: [];
-    in-out property <string> readout-pos: "center-center";
-    in-out property <length> readout-width: root.size;
-    in-out property <length> readout-height: root.readout-font-size + 8px;
-    in-out property <color> readout-txt-color: Theme.active.ui_label_txt;
-    in-out property <color> readout-bg-color: transparent;
-    in-out property <length> readout-font-size: 11px;
-    in-out property <int> readout-font-weight: 400;
+    in property <bool> readout-enabled: true;
+    in property <bool> enabled: true;
+    in property <string> readout-text: "";
+    in property <string> readout-mode: "raw";
+    in property <string> readout-suffix: "";
+    in property <[string]> readout-literals: [];
+    in property <string> readout-pos: "center-center";
+    in property <length> readout-width: root.size;
+    in property <length> readout-height: root.readout-font-size + 8px;
+    in property <color> readout-txt-color: Theme.active.ui_label_txt;
+    in property <color> readout-bg-color: transparent;
+    in property <length> readout-font-size: 11px;
+    in property <int> readout-font-weight: 400;
 
     in-out property <float> min-value: 0;
     in-out property <float> max-value: 0;
@@ -112,7 +113,11 @@ export component RDSKnob inherits Rectangle {
         root.value < 0
             ? Math.ceil(root.value * 100.0) / 100.0
             : Math.floor(root.value * 100.0) / 100.0;
-    private property <float> readout-clamped: Math.max(0.0, Math.min(1.0, root.value));
+    private property <float> readout-normalized:
+        root.max-value == root.min-value
+            ? 0.0
+            : (root.value - root.min-value) / (root.max-value - root.min-value);
+    private property <float> readout-clamped: Math.max(0.0, Math.min(1.0, root.readout-normalized));
     private property <float> readout-percent: Math.floor(root.readout-clamped * 100.0);
     private property <int> readout-literal-index:
         root.readout-literals.length > 0
@@ -244,6 +249,7 @@ export component RDSKnob inherits Rectangle {
 
     // Touch area covers the entire component
     touch := TouchArea {
+        enabled: root.enabled;
         pointer-event(event) => {
             if (event.button == PointerEventButton.left && event.kind == PointerEventKind.down) {
                 root.drag-start-y = self.mouse-y;

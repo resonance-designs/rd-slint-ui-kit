@@ -1,0 +1,36 @@
+# RDSSimpSlider
+
+A simple bar slider for step-style controls or compact parameter adjustment.
+
+## Properties
+
+- **value**: `float` (Default: `0.0`) - Current value.
+- **min-value**: `float` (Default: `0.0`) - Minimum bound.
+- **max-value**: `float` (Default: `1.0`) - Maximum bound.
+- **orientation**: `string` (Default: `"vertical"`) - "vertical" or "horizontal".
+- **slider-width**: `length` (Default: `12px`) - Width of the slider.
+- **slider-height**: `length` (Default: `120px`) - Height of the slider.
+- **background-color**: `color` (Default: `Theme.active.background_raised`) - Track/background color.
+- **fill-color**: `color` (Default: `Theme.active.accent_secondary`) - Fill color of the active bar.
+- **border-clr**: `color` (Default: `Theme.active.border_subtle`) - Border color.
+- **border-size**: `length` (Default: `1px`) - Border width.
+- **radius**: `length` (Default: `4px`) - Corner radius.
+
+## Callbacks
+
+- **value-changed(float)**: Triggered when the value is modified by interaction.
+
+## Example
+
+```slint
+import { RDSSimpSlider } from "rds-slint-ui-kit/components/index.slint";
+
+RDSSimpSlider {
+    value: 0.5;
+    min-value: 0.0;
+    max-value: 1.0;
+    slider-width: 16px;
+    slider-height: 80px;
+    value-changed(v) => { /* handle value */ }
+}
+```

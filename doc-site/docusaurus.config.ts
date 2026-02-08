@@ -44,7 +44,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/resonance-designs/rds-slint-ui-kit/tree/main/doc-site/',
+            'https://github.com/resonance-designs/rds-slint-ui-kit/tree/master/doc-site/',
         },
         blog: {
           showReadingTime: true,
@@ -55,7 +55,7 @@ const config: Config = {
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/resonance-designs/rds-slint-ui-kit/tree/main/doc-site/',
+            'https://github.com/resonance-designs/rds-slint-ui-kit/tree/master/doc-site/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
