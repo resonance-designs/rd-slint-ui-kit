@@ -5,6 +5,11 @@ import styles from './styles.module.css';
 
 let globalInitialized = false;
 
+// Delay to ensure the canvas is fully mounted in the DOM before Slint initialization.
+// 100ms is usually sufficient for React to finish the render cycle and for the browser 
+// to accurately report offsetWidth/offsetHeight.
+const DOM_READINESS_DELAY_MS = 100;
+
 function SlintDemoInner() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const wasmUrl = useBaseUrl('/wasm/rds_wasm_demo.js');
@@ -12,7 +17,6 @@ function SlintDemoInner() {
 
     useEffect(() => {
         let isMounted = true;
-        let timeoutId: NodeJS.Timeout;
 
         async function initWasm() {
             try {
@@ -34,28 +38,7 @@ function SlintDemoInner() {
                     // Since the Rust main() is marked with #[wasm_bindgen(start)],
                     // it is automatically called by init.default().
                     // We don't need to call it again here.
-                    return;
                 }
-
-                if (!isMounted) return;
-
-                // Start the slint application if not already started by the hook
-                // or if we are re-mounting.
-                timeoutId = setTimeout(() => {
-                    if (isMounted && canvasRef.current) {
-                        // Ensure canvas internal size matches CSS size for Slint scaling
-                        canvasRef.current.width = canvasRef.current.offsetWidth;
-                        canvasRef.current.height = canvasRef.current.offsetHeight;
-
-                        try {
-                            // Only call main if we're not the first initialization
-                            // because the first initialization already called it via #[wasm_bindgen(start)]
-                            init.main();
-                        } catch (e) {
-                            console.warn('Slint main execution:', e);
-                        }
-                    }
-                }, 100);
             } catch (err) {
                 console.error('Failed to initialize Slint Wasm:', err);
             }
@@ -65,9 +48,6 @@ function SlintDemoInner() {
 
         return () => {
             isMounted = false;
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
         };
     }, [wasmUrl]);
 

@@ -1,6 +1,6 @@
 {
-  "name": "@resonance-designs/rds-slint-ui-kit",
-  "version": "0.1.14",
+  "name": "@resonance-designs/rd-slint-ui-kit",
+  "version": "0.1.15",
   "description": "Reusable Slint UI components for audio and creative apps",
   "license": "MIT",
   "repository": {

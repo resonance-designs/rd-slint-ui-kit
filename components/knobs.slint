@@ -151,6 +151,7 @@ export component RDSKnob inherits Rectangle {
     width: root.size;
     height: root.size;
     background: transparent;
+    opacity: root.enabled ? 1.0 : 0.45;
 
     Rectangle {
         visible: root.renderer == "lo-fi";

@@ -28,7 +28,7 @@
   - Updated all component MDX files and root README to reflect the latest property changes and new components.
   - Moved component documentation into category sub-folders and adjusted the navigation to mirror it.
   - Updated the HomepageFeatures component with custom graphics.
-  - Updated Web Assembly compoonent gallery/demo.
+  - Updated Web Assembly component gallery/demo.
 
 ## [0.1.12] - 2026-01-26
 

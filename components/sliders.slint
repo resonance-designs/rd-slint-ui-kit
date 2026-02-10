@@ -19,12 +19,14 @@ export component RDSSlider inherits Rectangle {
     in-out property <float> max-value: 127;
     in-out property <string> size: "large"; // "small", "medium", or "large"
     in-out property <string> orientation: "vertical"; // "vertical" or "horizontal"
-    in-out property <length> drag-start-pos: 0px;
-    in-out property <float> drag-start-value: 0;
     in-out property <float> drag-sensitivity: 1.0; // Adjust drag sensitivity
     in-out property <float> scroll-sensitivity: 1.0; // Adjust scroll sensitivity
 
     callback value-changed(float); // Callback when value changes
+
+    // Internal state
+    private property <length> drag-start-pos: 0px;
+    private property <float> drag-start-value: 0;
 
     // Size scale factors
     private property <float> scale: root.size == "small" ? 0.5 : (root.size == "medium" ? 0.75 : 1.0);
@@ -36,7 +38,7 @@ export component RDSSlider inherits Rectangle {
     in-out property <length> height-override: 0px;
     private property <length> effective-height: root.height-override > 0px ? root.height-override : root.base-height * root.scale;
     private property <length> scaled-travel: Math.max(10px, root.effective-height - 120px * root.scale);
-    private property <int> markings-count: Math.max(31, Math.round((root.effective-height - 100px * root.scale) / (10px * root.scale)) + 1);
+    private property <int> markings-count: Math.round((root.effective-height - 100px * root.scale) / (10px * root.scale)) + 1;
 
     width: root.is-horizontal ? root.effective-height : root.base-width * root.scale;
     height: root.is-horizontal ? root.base-width * root.scale : root.effective-height;
@@ -249,20 +251,6 @@ export component RDSSlider inherits Rectangle {
                     root.value-changed(root.value);
                 }
             }
-
-            scroll-event(event) => {
-                // Handle scroll wheel (convert delta-y from length to float)
-                let delta = event.delta-y != 0px ? event.delta-y : event.delta-x;
-                root.value = root.value - (delta / 1px) * root.scroll-sensitivity;
-
-                // Clamp value to range
-                root.value = Math.max(root.min-value, Math.min(root.max-value, root.value));
-
-                // Emit callback
-                root.value-changed(root.value);
-
-                return accept;
-            }
         }
     }
 }
@@ -279,8 +267,8 @@ Public members:
 - slider-height: length - Height of the slider
 - background-color: color - Track/background color
 - fill-color: color - Fill color
-- border-clr: color - Border color
-- border-size: length - Border width
+- border-color: color - Border color
+- border-width: length - Border width
 - radius: length - Border radius
 - value-changed(float): callback - Triggered when value changes
 */
@@ -293,8 +281,8 @@ export component RDSSimpSlider inherits Rectangle {
     in-out property <length> slider-height: 120px;
     in-out property <color> background-color: Theme.active.background_raised;
     in-out property <color> fill-color: Theme.active.accent_secondary;
-    in-out property <color> border-clr: Theme.active.border_subtle;
-    in-out property <length> border-size: 1px;
+    border-color: Theme.active.border_subtle;
+    border-width: 1px;
     in-out property <length> radius: 4px;
 
     callback value-changed(float);
@@ -314,8 +302,6 @@ export component RDSSimpSlider inherits Rectangle {
     clip: true;
 
     background: root.background-color;
-    border-width: root.border-size;
-    border-color: root.border-clr;
     border-radius: root.radius;
 
     Rectangle {
