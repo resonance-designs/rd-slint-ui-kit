@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.15] - 2026-02-10
+
+- Centralized UI gallery and deduplicate stepper sizing
+- Encapsulated slider state and fix markings rendering
+- Standardized properties and improve visual feedback
+- Fixed WASM initialization and lifecycle in demo site
+- Pinned wasm-pack and clean up toolchain configurations
+
 ## [0.1.14] - 2026-02-08
 
 - Increased stack size for builds.
