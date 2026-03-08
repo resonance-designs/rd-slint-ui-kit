@@ -16,6 +16,9 @@ Public members:
 - border-width: length - Width of the border
 - border-color: color - Color of the border
 - border-radius: length - Radius of the corners
+- layout-stretch: int - Backward-compat layout stretch override for older engine/device UIs (default: 0)
+- layout-preferred-width: length - Backward-compat preferred width override for older engine/device UIs
+  (default: max(button-width, content-width))
 - clicked(): callback - Triggered when the button is clicked
 */
 export component RDSButton {
