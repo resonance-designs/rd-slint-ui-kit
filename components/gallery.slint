@@ -1,0 +1,427 @@
+import { ScrollView } from "std-widgets.slint";
+import { Theme, ThemeManager } from "../theme/index.slint";
+import {
+    RDSButton,
+    RDSSelectButton,
+    RDSSequencerCell,
+    RDSHeaderLabel,
+    RDSVUMeter,
+    RDSVertVUMeter,
+    RDSWaveformViz,
+    RDSOscilloscopeViz,
+    RDSSpectrumViz,
+    RDSVectorscopeViz,
+    RDSCircleToggle,
+    RDSToggle,
+    RDSKnob,
+    RDSSlider,
+    RDSSimpSlider,
+    RDSNumStepper,
+    RDSTextStepper,
+    RDSComboBox,
+    RDSXYPad,
+    RDSNumericKeypad,
+    RDSKeybed
+} from "./index.slint";
+
+export component Gallery inherits ScrollView {
+    width: 100%;
+    height: 100%;
+
+    VerticalLayout {
+        padding: 30px;
+        spacing: 30px;
+        Text {
+            text: "RDS UI Kit - All Components Gallery - Web Assembly Demo";
+            horizontal-alignment: center;
+            color: Theme.active.text-primary;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 3px;
+        }
+
+        // --- Theme Switcher ---
+        HorizontalLayout {
+            spacing: 20px;
+            alignment: center;
+            RDSButton {
+                label: "Dark Mode";
+                active: Theme.is-dark;
+                clicked => { ThemeManager.switch_to_dark(); }
+            }
+            RDSButton {
+                label: "Light Mode";
+                active: !Theme.is-dark;
+                clicked => { ThemeManager.switch_to_light(); }
+            }
+        }
+
+        // --- Labels ---
+        VerticalLayout {
+            spacing: 10px;
+            RDSHeaderLabel { text: "LABELS"; }
+            RDSHeaderLabel {
+                text: "Custom Header Label";
+                bg-color: Theme.active.accent_primary;
+                txt-color: #fff;
+                letter-spacing: 2px;
+                RDSCircleToggle { active: true; }
+            }
+        }
+
+        // --- Buttons & Toggle ---
+        VerticalLayout {
+            spacing: 10px;
+            RDSHeaderLabel { text: "BUTTONS & TOGGLES"; }
+            HorizontalLayout {
+                spacing: 20px;
+                alignment: start;
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSButton";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 10px;
+                        RDSButton { label: "Default"; }
+                        RDSButton { label: "Active"; active: true; }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSSelectButton";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 10px;
+                        RDSSelectButton { label: "Default"; }
+                        RDSSelectButton { label: "Active"; active: true; }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSSequencerCell";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 4px;
+                        for i in 8: RDSSequencerCell {
+                            active: Math.mod(i, 3) == 0;
+                            current: i == 2;
+                        }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSToggle";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 10px;
+                        RDSToggle { on-icon: "pause"; off-icon: "play_arrow"; active: true; }
+                        RDSToggle { on-icon: "mic"; off-icon: "mic_off"; active: false; }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSCircleToggle";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 15px;
+                        RDSCircleToggle { label: "Off"; active: false; }
+                        RDSCircleToggle { label: "On"; active: true; }
+                        RDSCircleToggle { label: "Custom"; active-color: Theme.active.meter-normal; active: true; }
+                    }
+                }
+            }
+        }
+
+        // --- Knobs & Sliders ---
+        VerticalLayout {
+            spacing: 10px;
+            RDSHeaderLabel { text: "KNOBS & SLIDERS"; }
+            HorizontalLayout {
+                spacing: 12px;
+                alignment: start;
+                VerticalLayout {
+                    spacing: 10px;
+                    RDSHeaderLabel {
+                        text: "RDSKnob";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    GridLayout {
+                        spacing: 10px;
+                        Row {
+                            HorizontalLayout {
+                                padding-top: 20px;
+                                spacing: 10px;
+                                RDSKnob { renderer: "lo-fi"; label: "Fixed Range"; label-pos: "top-center"; value: 75; min-value: -100; max-value: 100; size: 66px; indicator-position: 20px; }
+                                RDSKnob { renderer: "lo-fi"; label: "Infinite"; label-pos: "top-center"; infinite-rotary: true; value: 0; size: 66px; indicator-position: 20px; indicator: "line"; }
+                            }
+                        }
+                        Row {
+                            HorizontalLayout {
+                                padding-top: 20px;
+                                spacing: 10px;
+                                RDSKnob { label: "Fixed Range"; label-pos: "top-center"; value: 75; min-value: -100; max-value: 100; size: 66px; indicator-position: 20px; }
+                                RDSKnob { label: "Infinite"; label-pos: "top-center"; infinite-rotary: true; value: 0; size: 66px; indicator-position: 20px; indicator: "line"; }
+                            }
+                        }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 10px;
+                    width: 634px;
+                    RDSHeaderLabel {
+                        text: "RDSSlider";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 20px;
+                        VerticalLayout {
+                            height: 100px;
+                            Text { text: "Small Vert"; color: Theme.active.text_secondary; }
+                            RDSSlider { x: parent.width / 6; value: 127; size: "small"; }
+                        }
+                        VerticalLayout {
+                            height: 326px;
+                            Text { text: "Medium Vert"; color: Theme.active.text_secondary; }
+                            RDSSlider { x: parent.width / 10; value: 127; size: "medium"; }
+                        }
+                        VerticalLayout {
+                            Text { text: "Large Vert"; color: Theme.active.text_secondary; }
+                            RDSSlider { value: 127; size: "large"; }
+                        }
+                        VerticalLayout {
+                            height: 240px;
+                            spacing: 12px;
+                            Text { text: "Small Horizontal"; color: Theme.active.text_secondary; }
+                            RDSSlider { value: 127; size: "small"; orientation: "horizontal"; }
+                            Text { text: "Medium Horizontal"; color: Theme.active.text_secondary; }
+                            RDSSlider { value: 127; size: "medium"; orientation: "horizontal"; }
+                            Text { text: "Large Horizontal"; color: Theme.active.text_secondary; }
+                            RDSSlider { value: 127; size: "large"; orientation: "horizontal"; }
+                        }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 10px;
+                    width: 140px;
+                    RDSHeaderLabel {
+                        text: "RDSSimpSlider";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 20px;
+                        VerticalLayout {
+                            height: 200px;
+                            HorizontalLayout {
+                                spacing: 16px;
+                                RDSSimpSlider { value: 0.7; slider-width: 60px; slider-height: 180px; }
+                                RDSSimpSlider { value: 0.3; slider-width: 60px; slider-height: 180px; fill-color: Theme.active.meter_clip; }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // --- Selectors ---
+        VerticalLayout {
+            spacing: 10px;
+            RDSHeaderLabel { text: "SELECTORS"; }
+            HorizontalLayout {
+                spacing: 30px;
+                alignment: start;
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSComboBox";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSComboBox {
+                        model: ["Sine", "Square", "Saw", "Triangle", "Noise"];
+                        current-index: 0;
+                        width: 150px;
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSNumStepper";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 10px;
+                        RDSNumStepper { value: 120; min-value: 40; max-value: 240; }
+                        RDSNumStepper { value: 440; button-pos: "left-right"; }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSTextStepper";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSTextStepper {
+                        options: ["Low", "Medium", "High", "Ultra"];
+                        index: 1;
+                    }
+                }
+            }
+        }
+
+        // --- Visualizers ---
+        VerticalLayout {
+            spacing: 10px;
+            RDSHeaderLabel { text: "VISUALIZERS"; }
+            HorizontalLayout {
+                spacing: 20px;
+                VerticalLayout {
+                    spacing: 10px;
+                    RDSHeaderLabel {
+                        text: "RDSVUMeter";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    VerticalLayout {
+                        spacing: 20px;
+                        VerticalLayout {
+                            spacing: 10px;
+                            RDSVUMeter { level: 0.8; height: 40px; width: 280px; }
+                            RDSVUMeter { level: 0.7; height: 40px; fill-color: Theme.active.meter_normal; width: 280px; }
+                        }
+                        VerticalLayout {
+                            spacing: 10px;
+                            RDSVUMeter { level: 0.8; height: 20px; width: 240px; }
+                            RDSVUMeter { level: 0.7; height: 20px; fill-color: Theme.active.meter_normal; width: 240px; }
+                        }
+                        VerticalLayout {
+                            spacing: 10px;
+                            RDSVUMeter { level: 0.8; width: 200px; }
+                            RDSVUMeter { level: 0.7; fill-color: Theme.active.meter_normal; width: 200px; }
+                        }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 10px;
+                    RDSHeaderLabel {
+                        text: "RDSVertVUMeter";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    HorizontalLayout {
+                        spacing: 20px;
+                        HorizontalLayout {
+                            spacing: 10px;
+                            RDSVertVUMeter { level: 0.6; height: 120px; }
+                            RDSVertVUMeter { level: 0.7; height: 120px; }
+                        }
+                        HorizontalLayout {
+                            spacing: 10px;
+                            RDSVertVUMeter { level: 0.7; width: 20px; height: 160px; }
+                            RDSVertVUMeter { level: 0.6; width: 20px; height: 160px; }
+                        }
+                        HorizontalLayout {
+                            spacing: 10px;
+                            RDSVertVUMeter { level: 0.6; width: 40px; height: 200px; }
+                            RDSVertVUMeter { level: 0.7; width: 40px; height: 200px; }
+                        }
+                    }
+                }
+                VerticalLayout {
+                    spacing: 10px;
+                    RDSHeaderLabel {
+                        text: "RDSWaveformViz";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSWaveformViz {
+                        waveform: [0.1, 0.5, 0.8, 0.4, 0.2, 0.6, 0.9, 0.3, 0.5, 0.2];
+                        width: 410px;
+                        height: 220px;
+                        playhead-index: 4;
+                    }
+                }
+            }
+            HorizontalLayout {
+                spacing: 20px;
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSOscilloscopeViz";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSOscilloscopeViz {
+                        oscilloscope: [0.0, 0.1, 0.1, 0.4, 0.7, 1.0, 0.7, -0.7, -1.0, -0.7, -0.1, 0.0, 0.1, 0.4, 0.7, 1.0, 0.7, -0.7, -1.0, -0.7, -0.1, 0.0, 0.1, 0.4, 0.7, 1.0, 0.7, -0.7, -1.0, -0.7, -0.1, 0.0, 0.1, 0.4, 0.7, 1.0, 0.7, -0.7, -1.0, -0.7, -0.1, 0.0];
+                        width: 410px;
+                        height: 220px;
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSSpectrumViz";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSSpectrumViz {
+                        spectrum: [0.1, 0.3, 0.5, 0.8, 0.9, 0.7, 0.5, 0.4, 0.3, 0.2, 0.15, 0.1, 0.08, 0.05, 0.03, 0.02];
+                        width: 410px;
+                        height: 220px;
+                    }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSVectorscopeViz";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSVectorscopeViz {
+                        vectorscope-x: [0.0, 0.2, 0.4, 0.6, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.6, -0.4, -0.2, 0.0, 0.2, 0.4];
+                        vectorscope-y: [0.0, 0.1, 0.3, 0.6, 0.8, 0.9, 0.7, 0.5, 0.3, 0.1, -0.1, -0.3, -0.5, -0.7, -0.6, -0.4];
+                        width: 220px;
+                        height: 220px;
+                    }
+                }
+            }
+        }
+
+        // --- Inputs & Pads ---
+        VerticalLayout {
+            spacing: 10px;
+            RDSHeaderLabel { text: "INPUTS & PADS"; }
+            HorizontalLayout {
+                height: 220px;
+                spacing: 30px;
+                alignment: start;
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSXYPad";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSXYPad { width: 200px; height: 200px; }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSNumericKeypad";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSNumericKeypad { current-value: 100.0; }
+                }
+                VerticalLayout {
+                    spacing: 5px;
+                    RDSHeaderLabel {
+                        text: "RDSKeybed";
+                        bg-color: Theme.active.accent-secondary;
+                    }
+                    RDSKeybed { octaves: 2; size: 31px; }
+                }
+            }
+        }
+    }
+}

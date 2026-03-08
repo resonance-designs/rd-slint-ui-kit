@@ -34,12 +34,17 @@ export component RDSButton {
     in property <length> border-width: 1px;
     in property <color> border-color: root.active ? Theme.active.accent_primary : Theme.active.border_strong;
     in property <length> border-radius: Theme.active.radius_medium;
+    // Backward-compat shim for older engine/device UIs that set layout properties on RDSButton.
+    in property <int> layout-stretch: 0;
+    in property <length> layout-preferred-width: Math.max(root.button-width, root.content-width);
     callback clicked();
     callback pressed();
     callback released();
 
     private property <length> content-width: label_metrics.preferred-width + root.label-padding-left + root.label-padding-right;
     height: root.button-height;
+    horizontal-stretch: root.layout-stretch;
+    preferred-width: root.layout-preferred-width;
     min-width: Math.max(root.button-width, root.content-width);
     Rectangle {
         width: parent.width;

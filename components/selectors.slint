@@ -3,6 +3,47 @@ import { ScrollView } from "std-widgets.slint";
 import { Theme } from "../theme/index.slint";
 
 /*
+Global: StepperLayout
+Description: Shared layout and sizing logic for stepper components.
+*/
+export global StepperLayout {
+    public pure function calc_width(
+        button_pos: string, 
+        button_tog: bool, 
+        button_width: length, 
+        readout_width: length, 
+        lr_spacing: length, 
+        lr_padding: length, 
+        tb_padding: length
+    ) -> length {
+        return button_pos == "left-right"
+            ? (
+                button_tog
+                    ? (button_width * 2 + readout_width + lr_spacing * 2 + lr_padding * 2)
+                    : (readout_width + lr_padding * 2)
+            )
+            : (Math.max(readout_width, button_width) + tb_padding * 2);
+    }
+
+    public pure function calc_height(
+        button_pos: string, 
+        button_tog: bool, 
+        button_height: length, 
+        readout_height: length, 
+        tb_spacing: length, 
+        tb_padding: length
+    ) -> length {
+        return button_pos == "left-right"
+            ? Math.max(readout_height, button_height)
+            : (
+                button_tog
+                    ? (button_height * 2 + readout_height + tb_spacing * 2 + tb_padding * 2)
+                    : (readout_height + tb_padding * 2)
+            );
+    }
+}
+
+/*
 Component: StepperButton
 Description: Internal helper for stepper increment/decrement buttons.
 Public members:
@@ -363,20 +404,8 @@ export component RDSNumStepper {
     private property <length> tb-padding: 4px;
     private property <length> tb-spacing: 4px;
 
-    width: button-pos == "left-right"
-        ? (
-            button-tog
-                ? (root.button-width * 2 + root.readout-width + root.lr-spacing * 2 + root.lr-padding * 2)
-                : (root.readout-width + root.lr-padding * 2)
-        )
-        : (Math.max(root.readout-width, root.button-width) + root.tb-padding * 2);
-    height: button-pos == "left-right"
-        ? Math.max(root.readout-height, root.button-height)
-        : (
-            button-tog
-                ? (root.button-height * 2 + root.readout-height + root.tb-spacing * 2 + root.tb-padding * 2)
-                : (root.readout-height + root.tb-padding * 2)
-        );
+    width: StepperLayout.calc_width(root.button-pos, root.button-tog, root.button-width, root.readout-width, root.lr-spacing, root.lr-padding, root.tb-padding);
+    height: StepperLayout.calc_height(root.button-pos, root.button-tog, root.button-height, root.readout-height, root.tb-spacing, root.tb-padding);
 
     Rectangle {
         width: parent.width;
@@ -509,26 +538,15 @@ export component RDSTextStepper {
     callback index-changed(int);
 
     private property <int> max-index: options.length > 0 ? options.length - 1 : 0;
-    private property <string> current-label: options.length > 0 ? options[index] : "";
+    private property <int> safe-index: options.length > 0 ? Math.max(0, Math.min(root.index, root.max-index)) : 0;
+    private property <string> current-label: options.length > 0 ? options[safe-index] : "";
     private property <length> lr-padding: 8px;
     private property <length> lr-spacing: 6px;
     private property <length> tb-padding: 4px;
     private property <length> tb-spacing: 4px;
 
-    width: button-pos == "left-right"
-        ? (
-            button-tog
-                ? (root.readout-width + root.button-width * 2 + root.lr-spacing * 2 + root.lr-padding * 2)
-                : (root.readout-width + root.lr-padding * 2)
-        )
-        : (Math.max(root.readout-width, root.button-width) + root.tb-padding * 2);
-    height: button-pos == "left-right"
-        ? Math.max(root.readout-height, root.button-height)
-        : (
-            button-tog
-                ? (root.button-height * 2 + root.readout-height + root.tb-spacing * 2 + root.tb-padding * 2)
-                : (root.readout-height + root.tb-padding * 2)
-        );
+    width: StepperLayout.calc_width(root.button-pos, root.button-tog, root.button-width, root.readout-width, root.lr-spacing, root.lr-padding, root.tb-padding);
+    height: StepperLayout.calc_height(root.button-pos, root.button-tog, root.button-height, root.readout-height, root.tb-spacing, root.tb-padding);
 
     Rectangle {
         width: parent.width;

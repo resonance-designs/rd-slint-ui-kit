@@ -92,8 +92,9 @@ Button {
     export component MainWindow inherits Window {
         init => {
             Theme.active = MyCustomTheme.values;
+            Theme.is-dark = false; // or true, depending on your theme
         }
-        
+
         // ... your application UI
     }
     ```

@@ -25,5 +25,9 @@ cd ..
 echo Copying WASM artifacts to doc-site/build/wasm...
 if not exist "doc-site\build\wasm" mkdir "doc-site\build\wasm"
 xcopy /Y /E /I "wasm-demo\pkg" "doc-site\build\wasm"
+if %ERRORLEVEL% neq 0 (
+    echo WASM artifact copy failed!
+    exit /b %ERRORLEVEL%
+)
 
 echo Deployment build complete!

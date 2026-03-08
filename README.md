@@ -1,6 +1,6 @@
 # Resonance Designs – Slint UI Component Kit
 
-![Static Badge](https://img.shields.io/badge/Version-0.1.14-orange)
+![Static Badge](https://img.shields.io/badge/Version-0.1.15-orange)
 
 A reusable collection of Slint UI components designed for audio tools, sequencers, and creative applications.
 
@@ -315,6 +315,8 @@ RDSSimpSlider {
 ```
 
 ---
+
+### `RDSHeaderLabel`
 
 A styled header label with background, padding, and a right-side slot for child components.
 
@@ -805,6 +807,7 @@ To contribute to this project, you will need:
 ### Local Development Workflow
 
 #### 1. Validating Component Changes
+
 After modifying any `.slint` files in the `components/` directory, verify that they compile correctly using Cargo:
 
 ```bash
@@ -812,6 +815,7 @@ cargo check
 ```
 
 #### 2. Running the WASM Demo
+
 The WASM demo is the primary way to test components in an interactive environment:
 
 ```bash
@@ -822,6 +826,7 @@ npx serve .
 ```
 
 #### 3. Working on Documentation
+
 The documentation site is built with Docusaurus and supports live MDX previews:
 
 ```bash
@@ -831,6 +836,7 @@ npm start
 ```
 
 #### 4. Version Management
+
 We use a custom script to synchronize versions across `package.json`, `Cargo.toml`, and documentation:
 
 ```bash
